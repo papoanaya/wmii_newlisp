@@ -18,8 +18,10 @@
 ; $Date: $
 ; Author: $
 ;
-; DESCRIPTION
-
+; SOURCE
+ 
+* Motivation
+ 
 wmii_newlisp is a drop in replacement of the wmiirc files and shell scripts 
 used by the wmii window manager (wmii.suckless.org)
 
@@ -36,4 +38,5 @@ same functionality.
 
 * Installation 
 TBD - After documenting the code.
+
 ;******
