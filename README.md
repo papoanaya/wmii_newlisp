@@ -53,3 +53,10 @@ the colors are embedded in the code and not easily configurable.
 Installation 
 ------------
 TBD - After documenting the code.
+
+License
+-------
+This code has been developed under the terms and conditions of the 
+GNU Public License version 3.0 as described in the license file (LICENSE) 
+included in the distribution.  Even though this software is harboring itself
+under this license, it is in no part of the Gnu family of software offerings. 
