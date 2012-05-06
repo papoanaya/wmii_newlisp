@@ -69,10 +69,10 @@
     (setq key_bindings 
 	  (list 
 
-;****** key-items/Mod-left
+;****** key-items/Mod-Left
 ;
 ; NAME
-;   Mod-left
+;   Mod-Left
 ;
 ; DESCRIPTION
 ;   Selects the client on the left.
@@ -84,10 +84,10 @@
 	   '((format  "%s-%s" MODKEY LEFT)
 	     (list '! "wmiir xwrite /tag/sel/ctl select left"))
 
-;****** key-items/Mod-right
+;****** key-items/Mod-Right
 ;
 ; NAME
-;   Mod-right
+;   Mod-Right
 ;
 ; DESCRIPTION
 ;   Selects the client on the right.
@@ -98,10 +98,10 @@
 	   '((format  "%s-%s" MODKEY RIGHT)
 	     (list '! "wmiir xwrite /tag/sel/ctl select right"))
 
-;****** key-items/Mod-up
+;****** key-items/Mod-Up
 ;
 ; NAME
-;   Mod-up
+;   Mod-Up
 ;
 ; DESCRIPTION
 ;   Selects the client on the top.
@@ -112,10 +112,10 @@
 	   '((format  "%s-%s" MODKEY UP)
 	     (list '! "wmiir xwrite /tag/sel/ctl select up"))
 
-;****** key-items/Mod-down
+;****** key-items/Mod-Down
 ;
 ; NAME
-;   Mod-down
+;   Mod-Down
 ;
 ; DESCRIPTION
 ;   Selects the client on the bottom.
@@ -126,10 +126,10 @@
 	   '((format  "%s-%s" MODKEY DOWN)
 	     (list '! "wmiir xwrite /tag/sel/ctl select down"))
 
-;****** key-items/Mod-space
+;****** key-items/Mod-Space
 ;
 ; NAME
-;   Mod-space
+;   Mod-Space
 ;
 ; DESCRIPTION
 ;   Toggles between floating and managed layers.
@@ -140,10 +140,10 @@
 	   '((format "%s-space" MODKEY)   ; Toggle between floating and managed layers
 	     (list '!"wmiir xwrite /tag/sel/ctl select toggle"))
 
-;****** key-items/Mod-Control-up
+;****** key-items/Mod-Control-Up
 ;
 ; NAME
-;   Mod-Control-up
+;   Mod-Control-Up
 ;
 ; DESCRIPTION
 ;   Select the stack above.
@@ -155,10 +155,10 @@
 	   '((format "%s-Control-%s" MODKEY UP)    # Select the stack above
 	     (list '! "wmiir xwrite /tag/sel/ctl select up stack"))
 
-;****** key-items/Mod-Control-down
+;****** key-items/Mod-Control-Down
 ;
 ; NAME
-;   Mod-Control-down
+;   Mod-Control-Down
 ;
 ; DESCRIPTION
 ;   Select the stack below.
