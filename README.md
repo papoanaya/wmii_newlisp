@@ -1,18 +1,49 @@
-* Motivation
+WMII_NEWLISP
+===========
  
 wmii_newlisp is a drop in replacement of the wmiirc files and shell scripts 
 used by the wmii window manager (wmii.suckless.org)
+
+Motivation
+----------
 
 It was written out of a necessity of having a lightweight implementation
 of the shell based scripts using something "other than shell"
 in a customer site. 
 
-I usually have newlisp compiled almost everywhere I work in because of its 
+I compile newlisp almost everywhere I work in because of its 
 small size and performance.  In this specific case, the shell script 
-configuration in use in this site had a hard coded timeout value, causing
-the window manager to stop working after a while. Developing
-these in newlisp gave me a relatively simple way to have the
-same functionality. 
+configuration in use in this particular site had a hard coded timeout value, 
+causing the window manager to stop working after a while.  A solution
+was needed being that I am an avid wmii user. 
 
-* Installation 
+Even though there are scripts for plan 9's rc, python and ruby available
+in the stock instalation of wmii,  none of these were suitable in this specific 
+case because of lack of availability, dependencies  and footprint. 
+
+Developing these in NewLisp gave me a relatively simple way to have the
+same functionality in a small package. Even though it is a straight copy
+from the shell scripts, it provides a foundation to expand these scripts
+in a fast and flexible language.
+
+Known Issues
+------------
+
+The following are known issues that will be addressed as time permits:
+
+* Changed current macro implementation to a dictionary. This allows
+for improved execution performance and the ability to add 
+features without the need of a restart.
+
+* Make sure that all processes terminate when quit hits. For the 
+most part it has been addressed in the current version. But from 
+time to time, a process keeps dangling around.
+
+* Move from the shell implementation to direct libixp calls. Should improve
+performance at the expense of memory consumptions. This is a long term
+objective. 
+
+
+Installation 
+------------
 TBD - After documenting the code.
