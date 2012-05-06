@@ -20,7 +20,7 @@
 
 
 ;****** wmii.nlsp/start
-; NOTE
+; NOTES
 ;   The following is used to determine that the correct
 ;   script and tells the window manager to start execution
 ;   using these for management.
@@ -35,7 +35,7 @@
       
 ;******
 
-;****f* menu.nlsp/wi_fmenu
+;****f* wmii.nlsp/wi_fmenu
 ;
 ;  NAME 
 ;   wi_fmenu
