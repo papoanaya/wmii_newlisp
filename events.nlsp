@@ -261,7 +261,7 @@
 )
 
 
-;****** event.nlsp/Events
+;****v* event.nlsp/Events
 ; NAME
 ;   Contains list of available events.
 ;   

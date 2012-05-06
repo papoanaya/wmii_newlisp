@@ -124,7 +124,7 @@
     resultado)
 )
 
-;****** actions.nlsp/Actions
+;****v* actions.nlsp/Actions
 ;
 ; NAME
 ;   Contains list of available actions

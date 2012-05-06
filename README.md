@@ -1,6 +1,25 @@
-wmii_newlisp
-============
-* Introduction
+;****** wmii_newlisp/README.md
+;
+; NAME 
+;   README.md
+; 
+; SYNOPSIS 
+;    Program documentation
+;
+;
+; AUTHOR 
+;    Luis R. Anaya
+; 
+; COPYRIGHT 
+;    (c) 2012 by Luis R. Anaya
+; 
+; $RCSfile: events.nlsp $
+; $Revision: 1.0 $
+; $Date: $
+; Author: $
+;
+; DESCRIPTION
+
 wmii_newlisp is a drop in replacement of the wmiirc files and shell scripts 
 used by the wmii window manager (wmii.suckless.org)
 
@@ -17,4 +36,4 @@ same functionality.
 
 * Installation 
 TBD - After documenting the code.
-
+;******
