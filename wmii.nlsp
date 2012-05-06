@@ -408,7 +408,7 @@
 
 ;******
 
-;****** wmii_eventloop/launch_event_process
+;****** wi_eventloop/launch_event_process
 ;
 ; NOTES
 ;   Create the pipes and launch the process the reads the events. 
