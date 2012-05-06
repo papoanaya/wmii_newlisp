@@ -83,8 +83,7 @@ and I am following suit.).
 1. Copy all the provided scripts by the wmii_newlisp package in the wmii 
 configuration directory.
 
-1. Make wmiirc executable by typing 
-     chmod 755 wmiirc 
+1. Make wmiirc executable by typing: chmod 755 wmiirc.
 
 1  Restart your window manager session and select to start wmii   This can be 
 either by: Selecting wmii in your desktop manager or starting wmii directly 
