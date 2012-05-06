@@ -397,7 +397,7 @@
 
 (define (wi_eventloop)
 
-;****** wmii.nlsp/wi_eventloop
+;****** wi_eventloop/keys
 ;
 ; NOTES
 ;   Write the keystrokes there were defined in keys.nlsp.
@@ -408,7 +408,7 @@
 
 ;******
 
-;****** wmii.nlsp/wi_eventloop
+;****** wmii_eventloop/launch_event_process
 ;
 ; NOTES
 ;   Create the pipes and launch the process the reads the events. 
@@ -423,7 +423,7 @@
 
 ;******
 
-;****** wmii.nlsp/wi_eventloop
+;****** wi_eventloop/read_events
 ;
 ; NOTES
 ;   Reading events consists of: 
@@ -447,7 +447,7 @@
 		(begin
 		  (setq commando (first a-line))
 ;******
-;****** wmii.nlsp/wi_eventloop
+;****** wi_eventloop/process_event
 ;
 ; NOTES
 ;   Select the operation based on:
