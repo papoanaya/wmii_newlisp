@@ -160,7 +160,7 @@
 
 ;****** wmii.nlsp/control
 ; 
-;  NOTE
+;  NOTES
 ;     The following gets the current values for font,
 ;     normal and focus color values. 
 ;     
@@ -174,7 +174,7 @@
 
 ;****** wmii.nlsp/clear_operation_list
 ; 
-;  NOTE
+;  NOTES
 ;     The following operation lists are assigned "nil"
 ;     on start. They are initialized when the keys.nlsp, 
 ;     menu.nlsp, actions.nlsp and events.nlsp are loaded
