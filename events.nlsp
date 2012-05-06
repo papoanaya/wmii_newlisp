@@ -1,46 +1,198 @@
+;****** wmii_newlisp/events.nlsp
+;
+; NAME 
+;   events.nlsp 
+; 
+; SYNOPSIS 
+;    A replacement wmii handler in newlisp. 
+;
+;    This file contains all the code related to windoe manager "events"
+;    handlers. These are window manager events that *not* user visible
+;    
+;
+; AUTHOR 
+;    Luis R. Anaya
+; 
+; COPYRIGHT 
+;    (c) 2012 by Luis R. Anaya
+; 
+; $RCSfile: events.nlsp $
+; $Revision: 1.0 $
+; $Date: $
+; Author: $
+;
+;******
 
-; Events have 1 argument.
+;****f* events.nlsp/event-items
+;
+; NAME 
+;   event-items 
+;
+;  DESCRIPTION
+;     Contains all the events and its bound command. The bound command 
+;     is obtained from the event loop handler
+;
+;  INPUT
+;     e - event - Used for variable substitution for macro creation
+; 
+;  OUTPUT
+;     Case statement mapping an event name to a piece of logic.
+; 
+;*****
+
+
 
 (define-macro (events-items e)
   (let ((resultado (list 'case (list 'first e))))
     (setq resultado 
 	  (append resultado
 		  (list     
+;***** event-items/Start
+;
+; NAME
+;   Start
+;
+; DESCRIPTION
+;   Validates that the start script is the right one, if not exits
+;
+;*****
+
 		   '("Start"
 		    (if (= (nth 1 e) wmiiscript)
 			(exit)))
+;****** event-items/Key 
+;
+; NAME
+;   Key   
+;
+; DESCRIPTION
+;   Key handler - not in use.
+;
+;*****
+
 		   '("Key"
 		    (Key (last e)))
+
+;****** event-items/CreateTag
+;
+; NAME
+;   CreateTag
+;
+; DESCRIPTION
+;   Creates a workspace.
+;
+;******
 
 		   '("CreateTag"
 		     (! 
 		      (format "echo '%s' %s | wmiir create \"/lbar/%s\"" 
-			      WMII_NORMCOLORS (last e) (last e))))
+			      WMII_NORMCOLORS (last e) (last e)))
+;****** event-items/DestroyTag
+;
+; NAME
+;   DestroyTag
+;
+; DESCRIPTION
+;   Destroys a workspace. 
+;
+;*****
+
 
 		   '("DestroyTag" 
 		    (! 
 		     (format "wmiir remove \"/lbar/%s\"" (last e))))
+
+;****** event-items/FocusTag
+;
+; NAME
+;   FocusTag
+;
+; DESCRIPTION
+;   Brings a workspace into view.
+;
+;*****
+
 
 		   '("FocusTag" 
 		    (!
 		     (format "wmiir xwrite \"/lbar/%s\" '%s' \"%s\"" 
 			     (last e) WMII_FOCUSCOLORS (last e))))
 
+;****** event-items/UnFocusTag
+;
+; NAME
+;   FocusTag
+;
+; DESCRIPTION
+;   Brings a workspace out of view.
+;
+;*****
+
 		   '("UnfocusTag" 
 		    (! 
 		     (format "wmiir xwrite \"/lbar/%s\" '%s' \"%s\" " 
 			     (last e) WMII_NORMCOLORS (last e))))
 
+;****** event-items/UrgentTag
+;
+; NAME
+;   UrgentTag
+;
+; DESCRIPTION
+;   Adds an asterisk into a workspace when an urgent message is 
+;   detected by the window manager.
+;
+;******
+
+
 		   '("UrgentTag"
 		    (! 
 		     (format "wmiir xwrite \"/lbar/%s\" \"*%s\"" (last e) (last e))))
+
+;****** event-items/NotUrgentTag
+;
+; NAME
+;   NotUrgentTag
+;
+; DESCRIPTION
+;   Removes an asterisk into a workspace when an urgent message is 
+;   expired.
+;
+;******
+
   
 		   '("NotUrgentTag"	
 		    (!
 		     (format "wmiir xwrite \"/lbar/%s\" \"%s\"" (last e) (last e))))
 
+
+;****** event-items/LeftBarDND 
+;
+; NAME
+;  LeftBarClick LeftBarDND
+;
+; DESCRIPTION
+;   Handles drag and drop into the lower left corner of the window.
+;
+;******
+
+
+
 		   '("LeftBarClick LeftBarDND" 
 		    '(! (format "wmiir xwrite /ctl view \"%s\"" (last e))))
+
+
+;****** event-items/Unresponsive
+;
+; NAME
+;  Unresponsive
+;
+; DESCRIPTION
+;   Handles unresponsive clients by presenting a dialog and asking
+;   the disposition of the client.
+;
+;******
+
 
 		   '("Unresponsive" 
 		    (let
@@ -66,6 +218,19 @@
 				 (format "wmiir xwrite /client/%s/ctl slay " client)))
 			  )))
 
+
+;****** event-items/Notice
+;
+; NAME
+;   Notice
+;
+; DESCRIPTION
+;   Writes notice in the notice bar which is in the lower right hand corner
+;   of the window manager.
+;
+;******
+
+
 		   '("Notice"
 		    (begin
 		      (! (format "wmiir xwrite %s %s"  noticebar wi_arg))
@@ -77,6 +242,17 @@
 			     (format "wmiir xwrite %s  " noticebar)))
 		      )
 		    )
+;****** event-items/Termination
+;
+; NAME
+;   List termination ""
+;
+; DESCRIPTION
+;   List terminator. Used by the key-list function to indicate the last option.
+;
+;******
+
+
 		   '("" true)
 		   )
 		  )
@@ -85,9 +261,32 @@
 )
 
 
+;****** event.nlsp/Events
+; NAME
+;   Contains list of available events.
+;   
+; SOURCE
 
 (setq Events (key-list (events-items e)))
 
+;******
+
+
+;****f* event.nlsp/Event
+;
+; NAME 
+;   Event
+;
+;  DESCRIPTION
+;     Evaluates the macro and executes the selected event.
+;
+;  INPUT
+;     e - event - A list containing the event to perform.
+; 
+;  OUTPUT
+;     Event is executed.
+; 
+;*****
 
 (define (Event e)
   (eval (events-items e))

@@ -1,11 +1,11 @@
-;***** wmii_newlisp/actions.nlsp
+;****** wmii_newlisp/actions.nlsp
 ;
 ; NAME 
-;   wmii_newlisp/actions.nlsp 
+;   actions.nlsp 
 ; 
 ; SYNOPSIS 
 ;    A replacement wmii handler in newlisp. 
-;    This file contains all the code related to windoe manager "actions" 
+;    This file contains all the code related to window manager "actions" 
 ;    handlers. These are window manager events that user visible
 ;    
 ;
@@ -15,24 +15,29 @@
 ; COPYRIGHT 
 ;    (c) 2012 by Luis R. Anaya
 ; 
-;*****
+; $RCSfile: actions.nlsp $
+; $Revision: 1.0 $
+; $Date: $
+; Author: $
+;
+;******
 
-;****f*
+;****f* actions.nlsp/action-items
 ;
 ; NAME 
 ;   action-items 
 ;
 ;  DESCRIPTION
-;     Contains all the actions and its bound command. The bound command 
+;     Contains all the actions and its bound command name. The bound command 
 ;     is extracted and piped through dmenu/wimenu 
 ;
 ;  INPUT
 ;     a - action - Used for variable substitution for macro creation
 ; 
 ;  OUTPUT
-;     Case statement mapping an action name to a procedure.
+;     Case statement mapping an action name to a piece of logic.
 ; 
-;*****
+;******
 
 
 
@@ -41,7 +46,7 @@
     (setq resultado 
 	  (append resultado (list 
 
-;*****
+;****** action-items/quit
 ;
 ; NAME
 ;   quit
@@ -49,7 +54,7 @@
 ; DESCRIPTION
 ;   Quits from the window manager
 ;
-;*****
+;******
 		  '("quit"
 		    (begin 
 		      (! "wmiir xwrite /ctl quit")
@@ -58,7 +63,7 @@
 		      (exit 0))
 		    )
 
-;*****
+;****** action-items/exec
 ; 
 ; NAME
 ;   exec
@@ -67,13 +72,13 @@
 ;   Executes dmenu, used to obtain the name of an executable and spawn it to
 ;   background. 
 ;
-;*****
+;******
 
 		  '("exec"
 		    (begin 
 		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
 		    )
-;*****
+;****** action-items/exec-term
 ; 
 ; NAME
 ;   exec-term
@@ -82,7 +87,7 @@
 ;   Executes dmenu, used to obtain the name of an executable runs it in a 
 ;   terminal.
 ;
-;*****
+;******
 
 
 		  '("exec-term"
@@ -91,7 +96,7 @@
 		      
 		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice )) ))
 
-;*****
+;****** action-items/status
 ;
 ; NAME
 ;   status
@@ -102,7 +107,7 @@
 ;   is in newlisp/wmiirc
 ;   
 ;
-;*****
+;******
 
 
 		  '("status"
@@ -119,7 +124,8 @@
     resultado)
 )
 
-;*****
+;****** actions.nlsp/Actions
+;
 ; NAME
 ;   Contains list of available actions
 ;   
@@ -127,9 +133,9 @@
 
 (setq Actions (key-list (action-items a)))
 
-;*****
+;******
 
-;****f*
+;****f* actions.nlsp/Action
 ;
 ; NAME 
 ;   Action
@@ -138,12 +144,12 @@
 ;     Evaluates the macro and executes the selected action.
 ;
 ;  INPUT
-;     a - action - A list containing the action to perform
+;     a - action - A list containing the action to perform.
 ; 
 ;  OUTPUT
 ;     Action is executed.
 ; 
-;*****
+;******
 
 
 (define (Action a)
