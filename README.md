@@ -1,25 +1,3 @@
-;****** wmii_newlisp/README.md
-;
-; NAME 
-;   README.md
-; 
-; SYNOPSIS 
-;    Program documentation
-;
-;
-; AUTHOR 
-;    Luis R. Anaya
-; 
-; COPYRIGHT 
-;    (c) 2012 by Luis R. Anaya
-; 
-; $RCSfile: events.nlsp $
-; $Revision: 1.0 $
-; $Date: $
-; Author: $
-;
-; SOURCE
- 
 * Motivation
  
 wmii_newlisp is a drop in replacement of the wmiirc files and shell scripts 
@@ -38,5 +16,3 @@ same functionality.
 
 * Installation 
 TBD - After documenting the code.
-
-;******
