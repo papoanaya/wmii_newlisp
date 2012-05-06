@@ -1,0 +1,82 @@
+
+; Menus items need to be created 
+; Menus have 3 arguments
+
+(define (menu-operations m)
+  (case (first m)
+    ("Client-3-Delete"
+     (! (format "wmiir xwrite /client/%s/ctl kill" (last m) )))
+
+    ("Client-3-Kill"
+     (! (format "wmiir xwrite /client/$s/ctl slay" (last m))))
+
+    ("Client-3-Fullscreen"
+     (! (format "wmiir xwrite /client/%s/ctl fullscreen on" (last m))))
+  
+    ("LBar-1-Click"
+     (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)) )) )
+
+    ("LBar-3-Delete"
+     (begin
+       (setq tag (nth 1 m))
+
+       (setq clients 
+	     (exec 
+	      (format "wmiir read /tag/%s/index | awk '!/^#/{print $2}'"
+		      tag )))
+
+       (dolist (c clients)
+	       (if (= tag 
+		      (first (exec 
+			      (format "wmiir read /client/%s/tags" c))
+			     ))
+		   (! (format "wmiir xwrite /client/%s/ctl kill" c))
+		   (! (format "wmiir xwrite /client/%s/tags -%s" 
+			      c tag))
+		   )
+	       (if (= 
+		    tag (wi_seltag))
+		   (begin
+		     (setq newtag 
+			   (wi_tags)); needs to be completed
+		     (setq "wmiir xwrite /ctl view %s" newtag)))
+	       )) )
+    ) )
+ 
+(define-macro (menu-items m)
+# Menus
+  (let ((resultado (list 'case (list 'first m))))
+    (setq resultado 
+	  (append resultado 
+		  (list 
+
+		   '("ClientMouseDown"
+		     ; I wish I could get these from the list
+		     (begin 
+		       (setq options '("Delete" "Kill" "Fullscreen"))
+		       (fork (wi_fnmenu "Client" 
+					    (nth 1 m) (nth 2 m) options)) ))
+
+		   '("LeftBarMouseDown"
+		     (begin 
+		       (setq options '("Delete"))
+		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options)) ))
+
+		   '("LeftBarClick"
+		     (begin 
+		       (setq options '() )
+		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options)) ))
+
+		   '("" true)
+		   )
+		  )
+	  )
+    resultado))
+
+
+
+(setq Menus (key-list (menu-items m)))
+
+(define (Menu m)
+  (eval (menu-items m))
+)

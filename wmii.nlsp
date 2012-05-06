@@ -1,0 +1,226 @@
+;;(context 'wmii)
+
+; Execute init script
+
+
+
+(if (nil? scriptname)
+    (setq scriptname wmiiscript))
+
+(if (=  scriptname wmiiscript)
+    (! (append "echo Start " wmiiscript " | wmiir write /event 2>/dev/null" )))
+      
+ 
+(define (wi_fnmenu loc cid carg options)
+ 
+  (if (and (= carg "3")
+	  (not (= options '())))
+      (begin 
+	(setq def_option (first options)) ; Menu ops is on button 3
+
+	(setq menu_items (let (mi "")
+			   (dolist (o options)
+				   (setq mi (append mi o ":" o " " )))))
+	(setq res (exec (format "wmii9menu -i \"%s\" %s " def_option menu_items)))
+
+	(if (not (= res '()))
+	    (begin
+	      (setq res (first res))
+	      (menu-operations (list (format "%s-%s-%s" loc carg res) cid )) ) ) )
+	(begin
+	  (menu-operations (list (format "%s-%s-%s" loc carg "Click") cid)) ))
+)
+
+
+(define (wi_events e)
+  ; event handler needs to be rebuilt
+  (events e)
+)
+
+(define (wi_fatal)
+  (println (append scriptname "Fatal " (args)))
+  (exit 1))
+
+(define (wi_notice)
+  (exec (append "xmessage " scriptname "Notice:" (args))))
+
+; set converts a key value attribute separated by spaces
+
+; an alternative would be to do the wmiir read /ctl
+; and proces in newlisp
+
+(define (wi_readctl k)
+  (setq ctl_result 
+	(exec (format "wmiir read /ctl | sed -n 's/^ %s //p'"  k ) ))
+)
+
+(setq wmiifont (wi_readctl "font"))
+(setq wmiinormcol (wi_readctl "normcolors"))
+(setq wmiifocuscol (wi_readctl "focuscolors"))
+(setq Keys nil)
+(setq Actions nil)
+(setq Menus nil)
+(setq Events nil)
+
+
+(define (wi_proglist d)
+  (unique (sort (directory d))) ; needs to be processed 
+)
+
+(define (wi_actions)
+  (setq a (wi_proglist (env "WMI_CONFPATH")))
+  "dummy"
+)
+  
+
+
+
+(define (wi_runconf c)
+  (if (= (first c) "-s")
+      (begin 
+	(setq sflag 1)
+	(setq c (rest c)) 
+	)
+      (setq sflag nil)
+      )
+  (setq which (first (exec "which which")))
+  (setq prog (append "PATH=\"" (env "WMII_CONFPATH") " " which " " (first c) "2>/dev/null"))
+  (setq c (rest c))
+  (if (nil? prog)
+      (if (nil? sflag)
+	  (exec (append prog " " c))
+	  (exec (append ". " prog)) ; this make no sense in this context.
+	  )
+      1
+      )
+)
+      
+
+(define (wi_script s)
+  (setq _noprog t)
+
+  (if (= (first s) "-f")
+      (begin
+	(setq _noprog="/dev/null")
+	(setq s (rest s))
+      ))
+  (setq which (first (exec "which which")))
+  (setq _prog (append "PATH=\"" (env "WMII_CONFPATH") " " which " " (first s) _noprog   )    )
+  (setq s (rest (rest s)))
+  (println (format "%s %s" _prog s)) ; consider using format;
+)
+      
+
+
+(define (wi_runcmd c)
+  (if (= (first c) "-t")
+      (begin
+	(setq tags (exec "wmiir read /tag/sel/ctl | sed 1q"))
+	(exec (append "wihack -tags " tags  " " (rest c)))
+	)
+      )
+  (process (rest c))
+)
+	  
+
+(define (wi_tags)
+	(exec "wmiir ls /tag | sed 's,/,,\; /^sel$/d'")
+)
+
+
+(define (wi_seltag)
+  (first (exec "wmiir read /tag/sel/ctl | sed 1q | tr -d '\012'"))
+)
+
+
+(define (wi_selclient)
+  (first (exec "wmiir read /client/sel/ctl | sed 1q | tr -d '\012'"))
+)
+
+
+
+
+(define (process_exists the_pid)
+  (setq get_process (exec "ps"))
+  (not (for-all 
+   (fn (x) 
+     (not (= the_pid (last (parse x))) ))
+   get_process) ) 
+)
+
+
+(define (wi_eventloop)
+  (! (append "echo \"" Keys "\"| wmiir write /keys"))
+
+  (map set '(myin bcout) (pipe))
+  (map set '(bcin myout) (pipe))
+
+  (setq wmiir_exec (first (exec "which wmiir")))
+  (setq pid (process (append wmiir_exec " read /event ") bcin bcout))
+
+  (while (= 1 1) 
+    (read myin a-stream 320)
+    (setq a-stream (parse a-stream "\n"))
+;    (println a-stream)
+
+    ; Not too sure on this one 
+    ; but I need a safevalve 
+
+    ;(if (not (process_exists pid))
+;	(exit))
+
+    (dolist (a-line a-stream)
+	    (setq a-line (parse (trim (trim a-line "\n"))))
+;	    (println a-line)
+	    (if (not (= a-line '()))
+		(begin
+		  (setq commando (first a-line))
+		  (cond 
+		   ((= "Key" commando ) (Key (nth 1 a-line)))
+		   ((= "Quit" commando)
+		    (begin
+		      (destroy pid)
+		      (destroy statuspid)
+		      (exit 0)
+		      ))
+		   ((not (nil? (find commando Events)))
+		    (Event a-line))
+		   ((not (nil? (find commando Menus)))
+		    (Menu a-line)) )
+		  ))
+   ))
+)
+	 
+
+(define (key-list x)
+  (setq x (slice x 2 (- (length x) 3))) 
+  (map 'first x))
+
+(define (convert-to-newline-string input-list)
+  (let ((resultado ""))
+    (dolist (l input-list)
+	    (setq resultado (append resultado l "\n")))
+    resultado))
+     
+(define (convert-to-padded-string input-list)
+  (let ((resultado ""))
+    (dolist (l input-list)
+	    (setq resultado (append resultado l " ")))
+    (trim resultado)))
+
+
+;; Load actions, keys, menus and events
+
+(dolist (dirtoload (parse (env "WMII_CONFPATH") ":"))
+;; 
+;; Load system
+;; 
+	(catch
+	 (load (append dirtoload "/events.nlsp" )) 'result)
+	(catch 
+	 (load (append dirtoload "/actions.nlsp" )) 'result)
+	(catch
+	 (load (append dirtoload "/keys.nlsp" )) 'result)
+	(catch
+	 (load (append dirtoload "/menu.nlsp" )) 'result)
+)

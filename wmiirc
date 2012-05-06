@@ -1,0 +1,191 @@
+#!/opt/bin/env newlisp
+; Configure wmii
+(setq wmiiscript "wmiirc") 
+
+# Configuration Variables
+(setq MODKEY "Mod1")
+(setq UP "k")
+(setq DOWN "j")
+(setq LEFT "h")
+(setq RIGHT "l")
+
+# Bars
+(setq noticetimeout 5)
+(setq noticebar "/rbar/!notice")
+
+# Colors tuples: "<text> <background> <border>"
+;export WMII_NORMCOLORS='#000000 #c1c48b #81654f'
+;export WMII_FOCUSCOLORS='#000000 #81654f #000000'
+;export WMII_BACKGROUND='#333333'
+
+(setq WMII_NORMCOLORS "\#bbbbbb \#222222 \#444444" )
+(setq WMII_FOCUSCOLORS "\#eeeeee \#005577 \#005577 " )
+(setq WMII_BACKGROUND "\#0C0C0C")
+
+(setq WMII_FONT "-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*")
+
+(setq WMII_TERM "xterm")
+(setq WMII_HOME nil)
+
+(setq pid nil)
+(setq statuspid nil)
+
+(setq Keys nil)
+(setq Actions nil)
+(setq Events nil)
+
+
+(constant 'SIGINT 2)
+(constant 'SIGKILL 9)
+(constant 'SIGQUIT 3)
+(constant 'SIGABRT 6)
+(constant 'SIGSTOP 19)
+(constant 'SIGTERM 15)
+
+
+(define (ctrlC-handler)
+  (destroy pid)
+  (exit)
+)
+
+
+
+;(signal SIGINT 'ctrlC-handler)
+;(signal SIGKILL 'ctrlC-handler)
+;(signal SIGQUIT 'ctrlC-handler)
+;(signal SIGABRT 'ctrlC-handler)
+;(signal SIGSTOP 'ctrlC-handler)
+;(signal SIGTERM 'ctrlC-handler)
+
+
+(if (not (nil? (env "WMII_CONFPATH")))
+    (setq WMII_HOME (first (parse (env "WMII_CONFPATH" )  ":")))
+)
+
+
+(if (not (directory? WMII_HOME))
+    (begin
+      (make-dir WMII_HOME)
+      (setq message (append 
+          "Welcome to wmii,\n\n"
+          "Most of wmii's default key bindings make use of the \n"
+          "Windows key, or equivalent. For keyboards lacking such\n"
+          "a key, many users change this to the Alt key.\n\n"
+          "Which would you prefer?"))
+      (setq res (exec (format "wihack -type DIALOG xmessage -nearmouse -buttons Windows,Alt -print -fn %s %s " WMII_FONT message)))
+      (if (and (= res "Alt") 
+	       (= MODKEY "Mod1"))
+	  (setq fp (open (append WMII_HOME "/wmiirc_local") "w"))
+	  (write-line fp (format "(setq MODKEY \"%s\")" MODKEY))
+	  (close fp)
+	  (! (append "chmod +x " WMII_HOME "/wmiirc_local"))
+	  )
+      )
+)
+
+# Menu history
+(setq hist (append WMII_HOME "/history"))
+(setq histnum 5000)
+
+# Column Rules - the easy way
+(! "
+wmiir write /colrules <<!
+/gimp/ -> 17+83+41
+/.*/ -> 62+38 # Golden Ratio
+!
+")
+
+# Tagging Rules - Same 
+(! "
+wmiir write /tagrules <<!
+/MPlayer|VLC/ -> ~
+!"
+)
+
+# Status Bar Info
+(define (status)
+  (append (last (parse (first (exec "uptime")) ":")) " | " (date))
+)
+
+(define (local_events) 1)
+; this will have to change.
+;(wi_runconf -s wmiirc_local)
+
+(load (append WMII_HOME "/wmiirc_local"))
+
+;; 
+;; Half of these pipes need to be done with pipe rather than
+;; piping through shell
+
+(! (format "echo %s | wmiir create $noticebar" WMII_NORMCOLORS))
+
+
+; Event processing
+; These will be translated into a hash
+
+
+(dolist (dirtoload (parse (env "WMII_CONFPATH") ":"))
+	(catch (load (append dirtoload "/wmii.nlsp")) 'result)
+)
+
+
+;; needs to be expanded as a macro
+
+
+
+; WM Configuration
+; Still the easy way
+ 
+(! (format "
+wmiir write /ctl <<!
+	font %s
+	focuscolors %s
+	normcolors %s
+	grabmod %s
+	border 1
+!" 
+	   WMII_FONT
+	   WMII_FOCUSCOLORS
+	   WMII_NORMCOLORS
+	   MODKEY
+	   )
+   )
+
+(process (format "xsetroot -solid \"%s\""  WMII_BACKGROUND))
+
+# Misc
+
+(setq progsfile (first (exec "wmiir namespace /.proglist")))
+
+; action needs to be obtained
+
+(setq statuspid (fork (Action (list "status") )))
+
+;;wi_proglist $PATH >$progsfile &
+
+# Setup Tag Bar
+
+;(println (exec "wmiir ls /lbar | sed 's,^,/lbar/,'"))
+
+(setq tag_list (exec "wmiir ls /lbar "))
+(if (not (null? tag_list))
+    (begin
+      (setq tag_bar (first (exec "wmiir ls /lbar | sed 's,^,/lbar/,'")))
+      (! (format "wmiir rm %s >/dev/null" tag_bar)) )
+)
+
+
+(setq seltag (first (exec "wmiir read /tag/sel/ctl | sed 1q")))
+
+
+(dolist (tag (wi_tags))
+
+  (begin
+   (if (= tag seltag)
+       (setq colorize (append "'" WMII_FOCUSCOLORS "' " tag))	
+       (setq colorize (append "'" WMII_NORMCOLORS "' " tag)) )
+   (! (format "echo %s | wmiir create /lbar/%s" colorize tag)) 
+   )
+)
+
+(wi_eventloop)

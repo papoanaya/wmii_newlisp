@@ -1,0 +1,186 @@
+
+;(setq MODKEY "Mod1")
+;(setq RIGHT "r")
+;(setq LEFT "l")
+;(setq UP "u")
+;(setq DOWN "d")
+;(setq WMII_TERM "xterm")
+;(setq Keys '())
+
+
+(define-macro (key-items k)
+  (let ((resultado (list 'case k)))
+    (dotimes (i 10)
+	     (setq resultado 
+		   (append resultado 
+			    (list (list 
+				  (eval (list 'format "%s-%d" MODKEY i))
+
+				  (list '! (format "wmiir xwrite /ctl view \"%d\"" i )) ))
+				 (list (list 
+				  (eval (list 'format "%s-Shift-%d" MODKEY i))
+				  (list '! (format "wmiir xwrite /client/sel/tags \"%d\"" i ))
+				  )) )))
+
+
+    (setq key_bindings 
+	  (list 
+	   '((format  "%s-%s" MODKEY LEFT)
+	     (list '! "wmiir xwrite /tag/sel/ctl select left"))
+
+	   '((format  "%s-%s" MODKEY RIGHT)
+	     (list '! "wmiir xwrite /tag/sel/ctl select right"))
+
+	   '((format  "%s-%s" MODKEY UP)
+	     (list '! "wmiir xwrite /tag/sel/ctl select up"))
+	   
+	   '((format  "%s-%s" MODKEY DOWN)
+	     (list '! "wmiir xwrite /tag/sel/ctl select down"))
+	   
+	   '((format "%s-space" MODKEY)   ; Toggle between floating and managed layers
+	     (list '!"wmiir xwrite /tag/sel/ctl select toggle"))
+
+	   '((format "%s-Control-%s" MODKEY UP)    # Select the stack above
+	     (list '! "wmiir xwrite /tag/sel/ctl select up stack"))
+
+	   '((format "%s-Control-%s" MODKEY DOWN)  # Select the stack below
+	     '(list '! "wmiir xwrite /tag/sel/ctl select down stack"))
+
+	   '((format "%s-Shift-%s"  MODKEY LEFT)   # Move selected client to the left
+	     (list '! "wmiir xwrite /tag/sel/ctl send sel left"))
+
+	   '((format "%s-Shift-%s" MODKEY RIGHT)  # Move selected client to the right
+	     (list '! "wmiir xwrite /tag/sel/ctl send sel right"))
+
+	   '((format "%s-Shift-%s" MODKEY UP)     # Move selected client up
+	     (list '! "wmiir xwrite /tag/sel/ctl send sel up"))
+
+	   '((format "%s-Shift-%s" MODKEY DOWN)   # Move selected client down
+	     (list '! "wmiir xwrite /tag/sel/ctl send sel down"))
+	   
+	   '((format "%s-Shift-%s" MODKEY "space")   # Toggle selected client between floating and managed layers
+	     (list '! "wmiir xwrite /tag/sel/ctl send sel toggle"))
+
+	   '((format "%s-f" MODKEY) # Toggle selected client's fullsceen state
+	     (list ' ! "wmiir xwrite /client/sel/ctl Fullscreen toggle"))
+
+	   '((format "%s-Shift-c" MODKEY)
+	     (list '! "wmiir xwrite /client/sel/ctl kill"))
+
+	   '((format "%s-d" MODKEY) # Set column to default mode
+	     (list '! "wmiir xwrite /tag/sel/ctl colmode sel default-max"))
+
+	   '((format "%s-s" MODKEY) # Set column to stack mode
+	     (list '! "wmiir xwrite /tag/sel/ctl colmode sel stack-max"))
+
+	   '((format "%s-m" MODKEY) # Set column to max mode
+	     (list ' ! "wmiir xwrite /tag/sel/ctl colmode sel stack+max"))
+
+	   '((format "%s-Shift-q" MODKEY)
+	     (list 'begin '(! "wmiir xwrite /ctl quit")
+		   '(destroy pid)
+		   '(destroy statuspid)
+		   '(exit 0)
+	     ))
+    
+	   '((format "%s-Return" MODKEY) # Launch a terminal
+	     (list '! (format "wmiir setsid %s &" WMII_TERM)))
+    
+
+	   '((format "%s-a" MODKEY)      # Open wmii actions menu
+	     (list 'begin
+		   '(setq actions (convert-to-newline-string Actions))
+		   '(setq menu_choice
+			   (exec (format 
+				  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" actions )))
+		   '(if (not (= menu_choice '()))
+			(begin
+			  (setq menu_choice (first menu_choice))
+			  (fork (Action  (list menu_choice)))
+			  (if (= menu_choice "quit") (exit 0)) )) 
+			  
+		   )
+	     )
+
+	   '((format "%s-t" MODKEY)      
+	     (list 'begin
+		   '(setq wt (wi_tags))
+		   '(if (not (= wt '() ))
+			(setq tags (convert-to-newline-string (wi_tags))))
+
+		   '(setq menu_choice
+			   (exec (format 
+				  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" tags )))
+
+		   '(if (not (= menu_choice '()))
+			(begin
+			  (setq menu_choice (first menu_choice))
+			  (fork (! (format "wmiir xwrite /ctl view %s" menu_choice))) ))
+		     
+		   )
+	     )
+
+	   '((format "%s-Shift-t" MODKEY)    
+	     (list 'begin
+		   '(setq wt (wi_tags))
+		   '(setq c (wi_selclient))
+		   '(if (not (= wt '() ))
+			  (setq tags (convert-to-newline-string (wi_tags))))
+
+		   '(setq menu_choice
+			   (exec (format 
+				  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" tags )))
+
+		   '(if (not (= menu_choice '()))
+			(begin
+			  (setq menu_choice (first menu_choice))
+			  (fork (! (format "wmiir xwrite /client/%s/tags %s" c menu_choice))) ))
+		     
+		   )
+	     )
+
+
+	   '((format "%s-e" MODKEY)      # Open program menu
+	     (list '! "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
+
+	   '((format "%s-Control-t" MODKEY) 
+					; Toggle all other key bindings
+	     (list 'begin 
+		   '(setq k (first (eval "wmiir read /keys | wc -l | tr -d ' \t\n'")))
+		   '(cond
+		     ((or (= k 0) (= k 1))
+		      (begin 
+					; what are Keys?
+			(! (format "echo -n \"%s\" | wmiir write /keys" Keys))
+			(! (format "wmiir xwrite /ctl grabmod %s" MODKEY))
+			))
+		     (true (begin
+			  (! (format "wmiir xwrite /keys %s-Control-t" MODKEY))
+			  (! "wmiir xwrite /ctl grabmod Mod3")))
+		     ))
+	     )
+	   '("" true)
+	   ))
+
+    (dolist (binding key_bindings)
+	    (setq resultado 
+		  (append resultado (list (list (eval (first binding)) (eval (nth 1 binding))))))
+	    )
+    resultado)
+    
+
+;KeyGroup Tag actions
+;Key $MODKEY-t       # Change to another tag
+;	(tag=$(wi_tags | wimenu -h "${hist}.tags" -n 50) && wmiir xwrite /ctl view $tag) &
+;Key $MODKEY-Shift-t # Retag the selected client
+;	c=$(wi_selclient)
+;	(tag=$(wi_tags | wimenu -h "${hist}.tags" -n 50) && wmiir xwrite /client/$c/tags $tag) &
+
+)
+# Key Variables
+
+
+(setq Keys (convert-to-newline-string (key-list (key-items k))))
+(define (Key k)
+  (eval (key-items k))
+)

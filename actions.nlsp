@@ -1,0 +1,49 @@
+
+; Actions
+
+
+(define-macro (action-items a)
+  (let ((resultado (list 'case (list 'first a))))
+    (setq resultado 
+	  (append resultado (list 
+
+		  '("quit"
+		    (begin 
+		      (! "wmiir xwrite /ctl quit")
+		      (destroy pid)
+		      (destroy statuspid)
+		      (exit 0))
+		    )
+
+		  '("exec"
+		    (begin 
+		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
+		    )
+
+		  '("exec-term"
+		    (begin
+		      (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
+		      
+		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice )) ))
+
+		  '("status"
+		    (begin 
+		      (! "wmiir remove /rbar/status 2>/dev/null")
+		      (! (format "echo \"%s\" | wmiir create /rbar/status" 
+				 WMII_NORMCOLORS))
+		      (setq rc 0)		 
+		      (while (= rc 0)
+			     (setq rc (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
+			     (sleep 1000) ) 
+		      ))
+		  )))
+    resultado)
+)
+
+
+
+(setq Actions (key-list (action-items a)))
+
+(define (Action a)
+  (eval (action-items a))
+)
