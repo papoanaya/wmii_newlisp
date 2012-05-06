@@ -228,18 +228,6 @@ wmiir write /tagrules <<!
 )
 
 
-;****** wmiirc/remaining
-; 
-;  NOTES
-;     The remaining code is non user configurable. It:
-;     * Loads user configuration.
-;     * set up status and colors.
-;     * loads libraries
-;     * load workspaces
-;     * runs event loop.
-;
-;******
-
 ;****** wmiirc/user_configuration
 ; 
 ;  NOTES
