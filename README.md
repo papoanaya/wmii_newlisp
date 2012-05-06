@@ -18,7 +18,7 @@ causing the window manager to stop working after a while.  A solution
 was needed being that I am an avid wmii user. 
 
 Even though there are scripts for plan 9's rc, python and ruby available
-in the stock instalation of wmii,  none of these were suitable in this specific 
+in the stock installation of wmii,  none of these were suitable in this specific 
 case because of lack of availability, dependencies  and footprint. 
 
 Developing these in NewLisp gave me a relatively simple way to have the
@@ -37,11 +37,17 @@ features without the need of a restart.
 
 * Make sure that all processes terminate when quit hits. For the 
 most part it has been addressed in the current version. But from 
-time to time, a process keeps dangling around.
+time to time, a process keeps dangling around. There is code
+to check for process but it may be a bit expensive to run for
+every transaction. A solution is being researched. 
 
 * Move from the shell implementation to direct libixp calls. Should improve
 performance at the expense of memory consumptions. This is a long term
 objective. 
+
+* Dmenu is being used rather than the default wmimenu. This is because 
+of problems compiling wmimenu in Solaris and ARM.  In consequence
+the colors are embedded in the code and not easily configurable. 
 
 
 Installation 
