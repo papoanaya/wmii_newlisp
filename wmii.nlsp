@@ -1,11 +1,31 @@
+;****** wmii_newlisp/wmii.nlsp
 ;
-; wmii.nlsp
-; Libraries used by the wmiirc file
+; NAME 
+;   wmii.nlsp
+; 
+; SYNOPSIS 
+;    A replacement wmii handler in newlisp. 
+;    
+;    This file contains all the utility functions used 
+;    by the scripts for various purposes. Each of them is 
+;    is documented in its section.
+;    
+; AUTHOR 
+;    Luis R. Anaya
+; 
+; COPYRIGHT 
+;    (c) 2012 by Luis R. Anaya
+; 
+;******
+
+
+;****** wmii.nlsp/start
+; NOTE
+;   The following is used to determine that the correct
+;   script and tells the window manager to start execution
+;   using these for management.
 ;
-
-; Execute init script
-
-
+; SOURCE
 
 (if (nil? scriptname)
     (setq scriptname wmiiscript))
@@ -13,6 +33,37 @@
 (if (=  scriptname wmiiscript)
     (! (append "echo Start " wmiiscript " | wmiir write /event 2>/dev/null" )))
       
+;******
+
+;****f* menu.nlsp/wi_fmenu
+;
+;  NAME 
+;   wi_fmenu
+;
+;  DESCRIPTION
+;     It is used to run the pop-up menu wmii9menu and display the 
+;     selection.  After a selection is obtained, it is sent to menu_operations
+;     for execution.
+;
+;  INPUT
+;     loc - Location in which the menu was clicked. Text, currentlly only 
+;     "Client" and "LBar" are in use.
+;     
+;     cid - Client id, either window id or workspace id.
+;     
+;     carg - Client arguments. Pressed button. 
+;     
+;     options - Menu options to be displayed. (first option) 
+;     is default.
+; 
+;  OUTPUT
+;     Menu executes and an answer is obtained from the user.
+;   
+;  NOTES 
+;     Only right click raises the menu. 
+; 
+;******
+
  
 (define (wi_fnmenu loc cid carg options)
  
@@ -34,70 +85,154 @@
 	  (menu-operations (list (format "%s-%s-%s" loc carg "Click") cid)) ))
 )
 
-
-(define (wi_events e)
-  ; event handler needs to be rebuilt
-  (events e)
-)
+;****f* wmii.nlsp/wi_fatal
+;
+;  NAME 
+;   wi_fatal
+;
+;  DESCRIPTION
+;     Writes a fatal message and terminates. 
+;
+;  INPUT
+;     Argument list to print.
+; 
+;  OUTPUT
+;     Message written and process is terminated.
+; 
+; 
+;  NOTES
+;     Not in use - not operational. 
+;
+;******
 
 (define (wi_fatal)
-  (println (append scriptname "Fatal " (args)))
+  (println (append scriptname "Fatal " (string (args))))
   (exit 1))
 
+
+;****f* wmii.nlsp/wi_notice
+;
+;  NAME 
+;    wi_notice
+;
+;  DESCRIPTION
+;    Writes a notice in xmessage and returns.
+;
+;  INPUT
+;    Argument list to print.
+; 
+;  OUTPUT
+;     Notice is written. 
+; 
+;  NOTES
+;     Not in use - not operational. 
+;
+;******
+
+
 (define (wi_notice)
-  (exec (append "xmessage " scriptname "Notice:" (args))))
+  (exec (append "xmessage " scriptname "Notice:" (string (args)))))
 
-; set converts a key value attribute separated by spaces
 
-; an alternative would be to do the wmiir read /ctl
-; and proces in newlisp
+
+;****f* wmii.nlsp/wi_readctl
+;
+;  NAME 
+;    wi_readctl
+;
+;  DESCRIPTION
+;    Reads a control attribute from the ixp file system and
+;    writes the current value.
+;
+;  INPUT
+;    k - Control Attribute
+; 
+;  OUTPUT
+;     Value
+; 
+;******
+
 
 (define (wi_readctl k)
   (setq ctl_result 
 	(exec (format "wmiir read /ctl | sed -n 's/^ %s //p'"  k ) ))
 )
 
+;****** wmii.nlsp/control
+; 
+;  NOTE
+;     The following gets the current values for font,
+;     normal and focus color values. 
+;     
+;  SOURCE
+
 (setq wmiifont (wi_readctl "font"))
 (setq wmiinormcol (wi_readctl "normcolors"))
 (setq wmiifocuscol (wi_readctl "focuscolors"))
+
+;******
+
+;****** wmii.nlsp/clear_operation_list
+; 
+;  NOTE
+;     The following operation lists are assigned "nil"
+;     on start. They are initialized when the keys.nlsp, 
+;     menu.nlsp, actions.nlsp and events.nlsp are loaded
+;     later on in the code. 
+;     
+;  SOURCE
+
+
 (setq Keys nil)
 (setq Actions nil)
 (setq Menus nil)
 (setq Events nil)
 
+;******
+
+;****f* wmii.nlsp/wi_proglist
+;
+;  NAME 
+;    wi_proglist
+;
+;  DESCRIPTION
+;     Gets a sorted list of programs in a given directory.
+;
+;  INPUT
+;    d - Directory to obtain the list. 
+; 
+;  OUTPUT
+;     Sorted list of files from a directory.
+; 
+;  NOTES
+;     Not in use. 
+; 
+;******
 
 (define (wi_proglist d)
   (unique (sort (directory d))) ; needs to be processed 
 )
 
-(define (wi_actions)
-  (setq a (wi_proglist (env "WMI_CONFPATH")))
-  "dummy"
-)
-  
+;****f* wmii.nlsp/wi_script
+;
+;  NAME 
+;    wi_script
+;
+;  DESCRIPTION
+;     Executes a shell script. Not in use. Not operational
+;
+;  INPUT
+;    s - Script to execute
+; 
+;  OUTPUT
+;     Scripts executed
+; 
+;  NOTES
+;     This can be repurposed for custom scripts. It needs
+;     to be fixed and tested. 
+; 
+;******
 
-
-
-(define (wi_runconf c)
-  (if (= (first c) "-s")
-      (begin 
-	(setq sflag 1)
-	(setq c (rest c)) 
-	)
-      (setq sflag nil)
-      )
-  (setq which (first (exec "which which")))
-  (setq prog (append "PATH=\"" (env "WMII_CONFPATH") " " which " " (first c) "2>/dev/null"))
-  (setq c (rest c))
-  (if (nil? prog)
-      (if (nil? sflag)
-	  (exec (append prog " " c))
-	  (exec (append ". " prog)) ; this make no sense in this context.
-	  )
-      1
-      )
-)
-      
 
 (define (wi_script s)
   (setq _noprog t)
@@ -114,6 +249,26 @@
 )
       
 
+;****f* wmii.nlsp/wi_runcmd
+;
+;  NAME 
+;    wi_runcmd
+;
+;  DESCRIPTION
+;     Executes tags operations. 
+;
+;  INPUT
+;    c - Command to execute.
+; 
+;  OUTPUT
+;     Command assigned to a given workspace. 
+; 
+;  NOTES
+;     This can be repurposed for custom scripts. It needs
+;     to be fixed and tested. 
+; 
+;******
+
 
 (define (wi_runcmd c)
   (if (= (first c) "-t")
@@ -124,16 +279,67 @@
       )
   (process (rest c))
 )
+
+;****f* wmii.nlsp/wi_tags
+;
+;  NAME 
+;    wi_tags
+;
+;  DESCRIPTION
+;     Gets the list of current workspaces. 
+;
+;  INPUT
+;    None
+; 
+;  OUTPUT
+;     List of current workspaces
+; 
+;******
+
 	  
 
 (define (wi_tags)
 	(exec "wmiir ls /tag | sed 's,/,,\; /^sel$/d'")
 )
 
+;****f* wmii.nlsp/wi_seltag
+;
+;  NAME 
+;    wi_seltag
+;
+;  DESCRIPTION
+;     Gets the selected workspace.
+;
+;  INPUT
+;    None
+; 
+;  OUTPUT
+;    Selected workspace. 
+; 
+;******
+
 
 (define (wi_seltag)
   (first (exec "wmiir read /tag/sel/ctl | sed 1q | tr -d '\012'"))
 )
+
+
+
+;****f* wmii.nlsp/wi_selclient
+;
+;  NAME 
+;    wi_selclient
+;
+;  DESCRIPTION
+;     Gets the selected client. 
+;
+;  INPUT
+;    None
+; 
+;  OUTPUT
+;    Selected client. 
+; 
+;******
 
 
 (define (wi_selclient)
@@ -142,8 +348,26 @@
 
 
 
+;****f* wmii.nlsp/wi_processexists
+;
+;  NAME 
+;    wi_processexists
+;
+;  DESCRIPTION
+;     Runs "ps" and checks if a given 
+;     processid is running or not. 
+;
+;  INPUT
+;    Process id
+; 
+;  OUTPUT
+;    true if running, nil if not. 
+; 
+;******
 
-(define (process_exists the_pid)
+
+
+(define (wi_processexists the_pid)
   (setq get_process (exec "ps"))
   (not (for-all 
    (fn (x) 
@@ -152,8 +376,44 @@
 )
 
 
+;****f* wmii.nlsp/wi_eventloop
+;
+;  NAME 
+;    wi_eventloop
+;
+;  DESCRIPTION
+;    Main event loops. "Tails" from the wmii 
+;    event file and gets the event from the
+;    window manager. 
+;
+;  INPUT
+;    None
+; 
+;  OUTPUT
+;    Main execution. 
+; 
+;******
+
+
 (define (wi_eventloop)
+
+;****** wmii.nlsp/wi_eventloop
+;
+; NOTES
+;   Write the keystrokes there were defined in keys.nlsp.
+;
+; SOURCE     
+
   (! (append "echo \"" Keys "\"| wmiir write /keys"))
+
+;******
+
+;****** wmii.nlsp/wi_eventloop
+;
+; NOTES
+;   Create the pipes and launch the process the reads the events. 
+;
+; SOURCE     
 
   (map set '(myin bcout) (pipe))
   (map set '(bcin myout) (pipe))
@@ -161,23 +421,44 @@
   (setq wmiir_exec (first (exec "which wmiir")))
   (setq pid (process (append wmiir_exec " read /event ") bcin bcout))
 
+;******
+
+;****** wmii.nlsp/wi_eventloop
+;
+; NOTES
+;   Reading events consists of: 
+;   * Iterate through the output stream. and store into a 320 byte
+;     buffer. 
+;   * Split the buffer by each event that are separated by newlines.
+;   * Iterate through those events. 
+;   * Parse events by space and process them. 
+;
+; SOURCE     
+
   (while (= 1 1) 
     (read myin a-stream 320)
     (setq a-stream (parse a-stream "\n"))
-;    (println a-stream)
-
-    ; Not too sure on this one 
-    ; but I need a safevalve 
-
-    ;(if (not (process_exists pid))
-;	(exit))
 
     (dolist (a-line a-stream)
 	    (setq a-line (parse (trim (trim a-line "\n"))))
-;	    (println a-line)
+
 	    (if (not (= a-line '()))
+
 		(begin
 		  (setq commando (first a-line))
+;******
+;****** wmii.nlsp/wi_eventloop
+;
+; NOTES
+;   Select the operation based on:
+;   * Keystroke
+;   * Quit event
+;   * Event that has been defined in event.nlsp
+;   * Action defined in action.nlsp
+;   * Menu command defined in menu.nlsp
+;
+; SOURCE     
+
 		  (cond 
 		   ((= "Key" commando ) (Key (nth 1 a-line)))
 		   ((= "Quit" commando)
@@ -193,11 +474,51 @@
 		  ))
    ))
 )
-	 
+
+;******	 
+
+;****f* wmii.nlsp/key-list
+;
+;  NAME 
+;    key-list
+;
+;  DESCRIPTION
+;    Parses macro output to get the keys. Used all
+;    different handlers to make the available operations
+;    known. 
+;
+;  INPUT
+;    Output from the macro.creation script. 
+; 
+;  OUTPUT
+;    List with all available operations. 
+; 
+;******
 
 (define (key-list x)
   (setq x (slice x 2 (- (length x) 3))) 
   (map 'first x))
+
+
+;****f* wmii.nlsp/convert-to-newlines-string
+;
+;  NAME 
+;    convert-to-newline-string
+;
+;  DESCRIPTION
+;    Converts a list into a newline separated string.
+;
+;  INPUT
+;    A string of list
+; 
+;  OUTPUT
+;    A newline separated string. 
+;  
+;  NOTES
+;    Naming convention needs to be fixed. 
+; 
+;******
+
 
 (define (convert-to-newline-string input-list)
   (let ((resultado ""))
@@ -205,6 +526,27 @@
 	    (setq resultado (append resultado l "\n")))
     resultado))
      
+
+
+;****f* wmii.nlsp/convert-to-padded-string
+;
+;  NAME 
+;    convert-to-padded-string
+;
+;  DESCRIPTION
+;    Converts a list into a space separated string.
+;
+;  INPUT
+;    A string of list
+; 
+;  OUTPUT
+;    A space separated string. 
+;  
+;  NOTES
+;    Naming convention needs to be fixed. 
+; 
+;******
+
 (define (convert-to-padded-string input-list)
   (let ((resultado ""))
     (dolist (l input-list)
@@ -212,11 +554,21 @@
     (trim resultado)))
 
 
-;; Load actions, keys, menus and events
+
+
+;****** wmii.nlsp/loading-routines
+;
+;  NOTES
+;    The following loads all the required scripts.
+;    It iterates through WMII_CONFPATH and loads them
+;    into memory. 
+;
+;  SOURCE
+
 
 (dolist (dirtoload (parse (env "WMII_CONFPATH") ":"))
 ;; 
-;; Load system
+;; Load system in order. 
 ;; 
 	(catch
 	 (load (append dirtoload "/events.nlsp" )) 'result)
@@ -227,3 +579,5 @@
 	(catch
 	 (load (append dirtoload "/menu.nlsp" )) 'result)
 )
+
+;******
