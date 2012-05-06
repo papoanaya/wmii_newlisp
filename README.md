@@ -50,9 +50,52 @@ of problems compiling wmimenu in Solaris and ARM.  In consequence
 the colors are embedded in the code and not easily configurable. 
 
 
+Bugs
+----
+
+Plenty... Get Real Kill or RAID to terminate. Brave souls could also
+create an issue ticket in github. 
+
 Installation 
 ------------
-TBD - After documenting the code.
+I took the easy way out for installation and works for me. 
+In this case, your mileage may vary and depends on the amount
+of desired user intervention.
+
+If installing wmii from a packaged repository (apt, deb, pkg_man, etc)
+it will install the shell version by default.  If compiling from source, 
+the installation step will create those as well and store them in /etc. 
+
+If you are *still* inclined to install and use the wmii_newlisp scripts
+use the following steps that are not newbie friendly. (I apologize
+for that, but suckless tools are catered for experienced UNIX users
+and I am following suit.). 
+
+1. Install newlisp in a path accessible location (/usr/bin, /usr/local/bin)
+
+1. Install dmenu in a path accessible location. (http://dwm.suckless.org)
+
+1. Locate the directory where the wmii configuration is located, usually in 
+/etc/wmii or in /etc/X11/wmii
+
+1. Save a copy of the aforementioned wmii configuration directory.
+
+1. Copy all the provided scripts by the wmii_newlisp package in the wmii 
+configuration directory.
+
+1. Make wmiirc executable by typing 
+     chmod 755 wmiirc 
+
+1  Restart your window manager session and select to start wmii   This can be 
+either by: Selecting wmii in your desktop manager or starting wmii directly 
+after exiting from your running window manager.
+
+1. Test. 
+
+Ideally you should test by executing wmii against Xnest to ensure that the
+handlers are working before using it for daily use. For additional 
+documentation, go to http//wmii.suckless.org/. The documentation contains
+a list of wmii key bindings and list of available functionalities.
 
 License
 -------
