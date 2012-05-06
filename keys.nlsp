@@ -24,7 +24,7 @@
 ;     This macro builds the list of the operations that relate to key
 ;     bindings. 
 ;
-;  INPUT
+;  INPUTS
 ;     k - key stroke - Contains a list with the key stroke and arguments
 ;  
 ; 
@@ -540,7 +540,7 @@
 ;  DESCRIPTION
 ;     Evaluates the macro and executes the selected key stroke.
 ;
-;  INPUT
+;  INPUTS
 ;     k - key stroke - A list containing the key stroke and
 ;     arguments. 
 ; 

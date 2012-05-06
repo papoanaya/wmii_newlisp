@@ -210,7 +210,7 @@ wmiir write /tagrules <<!
 ;     Displays status in the lower right hand corner. 
 ;     It defaults to load and date. 
 ;
-;  INPUT
+;  INPUTS
 ;     None
 ; 
 ;  OUTPUT

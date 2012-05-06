@@ -27,7 +27,7 @@
 ;     Contains all the events and its bound command. The bound command 
 ;     is obtained from the event loop handler
 ;
-;  INPUT
+;  INPUTS
 ;     e - event - Used for variable substitution for macro creation
 ; 
 ;  OUTPUT
@@ -275,7 +275,7 @@
 ;  DESCRIPTION
 ;     Evaluates the macro and executes the selected event.
 ;
-;  INPUT
+;  INPUTS
 ;     e - event - A list containing the event to perform.
 ; 
 ;  OUTPUT

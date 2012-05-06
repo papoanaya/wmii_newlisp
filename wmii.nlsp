@@ -45,7 +45,7 @@
 ;     selection.  After a selection is obtained, it is sent to menu_operations
 ;     for execution.
 ;
-;  INPUT
+;  INPUTS
 ;     loc - Location in which the menu was clicked. Text, currentlly only 
 ;     "Client" and "LBar" are in use.
 ;     
@@ -93,7 +93,7 @@
 ;  DESCRIPTION
 ;     Writes a fatal message and terminates. 
 ;
-;  INPUT
+;  INPUTS
 ;     Argument list to print.
 ; 
 ;  OUTPUT
@@ -118,7 +118,7 @@
 ;  DESCRIPTION
 ;    Writes a notice in xmessage and returns.
 ;
-;  INPUT
+;  INPUTS
 ;    Argument list to print.
 ; 
 ;  OUTPUT
@@ -144,7 +144,7 @@
 ;    Reads a control attribute from the ixp file system and
 ;    writes the current value.
 ;
-;  INPUT
+;  INPUTS
 ;    k - Control Attribute
 ; 
 ;  OUTPUT
@@ -198,7 +198,7 @@
 ;  DESCRIPTION
 ;     Gets a sorted list of programs in a given directory.
 ;
-;  INPUT
+;  INPUTS
 ;    d - Directory to obtain the list. 
 ; 
 ;  OUTPUT
@@ -221,7 +221,7 @@
 ;  DESCRIPTION
 ;     Executes a shell script. Not in use. Not operational
 ;
-;  INPUT
+;  INPUTS
 ;    s - Script to execute
 ; 
 ;  OUTPUT
@@ -257,7 +257,7 @@
 ;  DESCRIPTION
 ;     Executes tags operations. 
 ;
-;  INPUT
+;  INPUTS
 ;    c - Command to execute.
 ; 
 ;  OUTPUT
@@ -288,7 +288,7 @@
 ;  DESCRIPTION
 ;     Gets the list of current workspaces. 
 ;
-;  INPUT
+;  INPUTS
 ;    None
 ; 
 ;  OUTPUT
@@ -310,7 +310,7 @@
 ;  DESCRIPTION
 ;     Gets the selected workspace.
 ;
-;  INPUT
+;  INPUTS
 ;    None
 ; 
 ;  OUTPUT
@@ -333,7 +333,7 @@
 ;  DESCRIPTION
 ;     Gets the selected client. 
 ;
-;  INPUT
+;  INPUTS
 ;    None
 ; 
 ;  OUTPUT
@@ -357,7 +357,7 @@
 ;     Runs "ps" and checks if a given 
 ;     processid is running or not. 
 ;
-;  INPUT
+;  INPUTS
 ;    Process id
 ; 
 ;  OUTPUT
@@ -386,7 +386,7 @@
 ;    event file and gets the event from the
 ;    window manager. 
 ;
-;  INPUT
+;  INPUTS
 ;    None
 ; 
 ;  OUTPUT
@@ -487,7 +487,7 @@
 ;    different handlers to make the available operations
 ;    known. 
 ;
-;  INPUT
+;  INPUTS
 ;    Output from the macro.creation script. 
 ; 
 ;  OUTPUT
@@ -508,7 +508,7 @@
 ;  DESCRIPTION
 ;    Converts a list into a newline separated string.
 ;
-;  INPUT
+;  INPUTS
 ;    A string of list
 ; 
 ;  OUTPUT
@@ -536,7 +536,7 @@
 ;  DESCRIPTION
 ;    Converts a list into a space separated string.
 ;
-;  INPUT
+;  INPUTS
 ;    A string of list
 ; 
 ;  OUTPUT

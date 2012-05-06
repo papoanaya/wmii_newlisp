@@ -27,7 +27,7 @@
 ;     Contains all the actual operations that get executed when a
 ;     menu item is selected form wmii9menu.
 ;
-;  INPUT
+;  INPUTS
 ;     m - menu selection - Contains a list with the menu selection and arguments
 ;  
 ; 
@@ -144,7 +144,7 @@
 ;  DESCRIPTION
 ;     Contains all the actions and its bound mouse action.
 ;
-;  INPUT
+;  INPUTS
 ;     m - menu selection - Contains the variable used to create the case 
 ;    statement. 
 ;  
@@ -257,7 +257,7 @@
 ;  DESCRIPTION
 ;     Evaluates the macro and executes the selected menu action.
 ;
-;  INPUT
+;  INPUTS
 ;     m - menu action - A list containing the menu action to perform.
 ; 
 ;  OUTPUT
