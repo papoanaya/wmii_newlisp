@@ -1,4 +1,7 @@
-;;(context 'wmii)
+;
+; wmii.nlsp
+; Libraries used by the wmiirc file
+;
 
 ; Execute init script
 
