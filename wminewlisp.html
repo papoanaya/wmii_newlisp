@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="./wminewlisp.css" type="text/css" />
+<title>./wminewlisp</title>
+<!-- Source: ./wmii_newlisp/ -->
+<!-- Generated with ROBODoc Version 4.99.38 (May  6 2012) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc"></a>
+</div> <!-- logo -->
+<hr />
+<a name="menu2ditems2fClientMouseDown"></a>
+<a name="robo21"></a><h2>menu-items/ClientMouseDown [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo30">menu-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>ClientMouseDown</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   It handles operations done when the mouse is clicked and held; Used for window
+   operations. 
+</pre>
+<p class="item_name">NOTES</p>
+<pre>   It can be improved by not having the options hard coded which should 
+   provide flexibility on use. As of now, wi_fmenu presents a menu
+   on right click only. 
+</pre>
+
+<hr />
+<a name="menu2ditems2fLeftBarClick"></a>
+<a name="robo22"></a><h2>menu-items/LeftBarClick [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo30">menu-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   LeftBarMouseClick
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   It handles operations done when the mouse is clicked on the 
+   lower left hand corner.
+ 
+   Used for workspace selection (workspace switching). 
+</pre>
+<p class="item_name">NOTES</p>
+<pre>   It can be improved by not having the options hard coded which should 
+   provide flexibility on use. As of now, wi_fmenu presents a menu
+   on right click only. 
+</pre>
+
+<hr />
+<a name="menu2ditems2fLeftBarMouseDown"></a>
+<a name="robo23"></a><h2>menu-items/LeftBarMouseDown [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo30">menu-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>LeftBarMouseDown</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   It handles operations done when the mouse is clicked and held on the 
+   lower left hand corner.
+ 
+   Used for workspace operations.
+</pre>
+<p class="item_name">NOTES</p>
+<pre>   It can be improved by not having the options hard coded which should 
+   provide flexibility on use. As of now, wi_fmenu presents a menu
+   on right click only. 
+</pre>
+
+<hr />
+<a name="menu2doperations2fClient2d32dDelete"></a>
+<a name="robo24"></a><h2>menu-operations/Client-3-Delete [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">menu-operations</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Client-3-Delete</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Closes the selected window. Not forced. 
+</pre>
+
+<hr />
+<a name="menu2doperations2fClient2d32dFullscreen"></a>
+<a name="robo25"></a><h2>menu-operations/Client-3-Fullscreen [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">menu-operations</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Client-3-Fullscreen</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Places the selected window in undecorated fullscreen mode. 
+</pre>
+
+<hr />
+<a name="menu2doperations2fClient2d32dKill"></a>
+<a name="robo26"></a><h2>menu-operations/Client-3-Kill [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">menu-operations</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Client-3-Kill</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Kills the selected window. Forced
+</pre>
+
+<hr />
+<a name="menu2doperations2fLBar2d12dClick"></a>
+<a name="robo27"></a><h2>menu-operations/LBar-1-Click [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">menu-operations</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>LBar-1-Click</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Selects the workspace by clicking on it in the lower left had corner of the
+   screen.
+</pre>
+
+<hr />
+<a name="menu2doperations2fLBar2d32dDelete"></a>
+<a name="robo28"></a><h2>menu-operations/LBar-3-Delete [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">menu-operations</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>LBar-3-Delete</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Closes all the clients and deletes the workspace by *right* clicking on it in the 
+   lower left had corner of the screen.
+</pre>
+
+<hr />
+<a name="menu2enlsp2fMenu"></a>
+<a name="robo29"></a><h2>menu.nlsp/Menu [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">menu.nlsp</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Menu</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Evaluates the macro and executes the selected menu action.
+
+  INPUT
+     m - menu action - A list containing the menu action to perform.
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     <strong>Menu</strong> action is executed.
+</pre>
+
+<hr />
+<a name="menu2enlsp2fmenu2ditems"></a>
+<a name="robo30"></a><h2>menu.nlsp/menu-items [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">menu.nlsp</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>menu-items</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Contains all the actions and its bound mouse action.
+
+  INPUT
+     m - menu selection - Contains the variable used to create the case 
+    statement. 
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     Case statement mapping the mouse event to an operations is created.
+</pre>
+
+<hr />
+<a name="menu2enlsp2fmenu2doperations"></a>
+<a name="robo31"></a><h2>menu.nlsp/menu-operations [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">menu.nlsp</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>menu-operations</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Contains all the actual operations that get executed when a
+     menu item is selected form wmii9menu.
+
+  INPUT
+     m - menu selection - Contains a list with the menu selection and arguments
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     Selected operations is executed. 
+</pre>
+
+<hr />
+<a name="menu2enlsp2fMenus"></a>
+<a name="robo32"></a><h2>menu.nlsp/Menus [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">menu.nlsp</a> ] [ Variables ]</p>
+<p class="item_name">NAME</p>
+<pre>   Contains list of available menu actions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">(setq <strong>Menus</strong> (key-list (<a href="#robo30">menu-items</a> m)))
+</pre>
+
+<hr />
+<a name="wmii5fnewlisp2fmenu2enlsp"></a>
+<a name="robo35"></a><h2>wmii_newlisp/menu.nlsp [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>menu.nlsp</strong>
+</pre>
+<p class="item_name">SYNOPSIS</p>
+<pre>    A replacement wmii handler in newlisp. 
+    This file contains all the code related to window manager "menu"
+    handlers. This file defines menu operations that are run through
+    wmii9menu.
+</pre>
+<p class="item_name">AUTHOR</p>
+<pre>    Luis R. Anaya
+</pre>
+<p class="item_name">COPYRIGHT</p>
+<pre>    (c) 2012 by Luis R. Anaya
+ 
+ $RCSfile: <a href="#robo33">actions.nlsp</a> $
+ $Revision: 1.0 $
+ $Date: $
+ Author: $
+</pre>
+
+<hr />
+<a name="event2ditems2fCreateTag"></a>
+<a name="robo7"></a><h2>event-items/CreateTag [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>CreateTag</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Creates a workspace.
+</pre>
+
+<hr />
+<a name="event2ditems2fDestroyTag"></a>
+<a name="robo8"></a><h2>event-items/DestroyTag [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>DestroyTag</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Destroys a workspace. 
+</pre>
+
+<hr />
+<a name="event2ditems2fFocusTag"></a>
+<a name="robo9"></a><h2>event-items/FocusTag [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>FocusTag</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Brings a workspace into view.
+</pre>
+
+<hr />
+<a name="event2ditems2fKey"></a>
+<a name="robo10"></a><h2>event-items/Key [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Key</strong>   
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   <strong>Key</strong> handler - not in use.
+</pre>
+
+<hr />
+<a name="event2ditems2fLeftBarDND"></a>
+<a name="robo11"></a><h2>event-items/LeftBarDND [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>  <a href="#robo22">LeftBarClick</a> <strong>LeftBarDND</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Handles drag and drop into the lower left corner of the window.
+</pre>
+
+<hr />
+<a name="event2ditems2fNotice"></a>
+<a name="robo12"></a><h2>event-items/Notice [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Notice</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Writes notice in the notice bar which is in the lower right hand corner
+   of the window manager.
+</pre>
+
+<hr />
+<a name="event2ditems2fNotUrgentTag"></a>
+<a name="robo13"></a><h2>event-items/NotUrgentTag [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>NotUrgentTag</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Removes an asterisk into a workspace when an urgent message is 
+   expired.
+</pre>
+
+<hr />
+<a name="event2ditems2fTermination"></a>
+<a name="robo14"></a><h2>event-items/Termination [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   List termination ""
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   List terminator. Used by the key-list function to indicate the last option.
+</pre>
+
+<hr />
+<a name="event2ditems2fUnFocusTag"></a>
+<a name="robo15"></a><h2>event-items/UnFocusTag [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <a href="#robo9">FocusTag</a>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Brings a workspace out of view.
+</pre>
+
+<hr />
+<a name="event2ditems2fUnresponsive"></a>
+<a name="robo16"></a><h2>event-items/Unresponsive [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>  <strong>Unresponsive</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Handles unresponsive clients by presenting a dialog and asking
+   the disposition of the client.
+</pre>
+
+<hr />
+<a name="event2ditems2fUrgentTag"></a>
+<a name="robo17"></a><h2>event-items/UrgentTag [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo20">event-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>UrgentTag</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Adds an asterisk into a workspace when an urgent message is 
+   detected by the window manager.
+</pre>
+
+<hr />
+<a name="event2enlsp2fEvent"></a>
+<a name="robo18"></a><h2>event.nlsp/Event [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Event</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Evaluates the macro and executes the selected event.
+
+  INPUT
+     e - event - A list containing the event to perform.
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     <strong>Event</strong> is executed.
+</pre>
+
+<hr />
+<a name="event2enlsp2fEvents"></a>
+<a name="robo19"></a><h2>event.nlsp/Events [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ Variables ]</p>
+<p class="item_name">NAME</p>
+<pre>   Contains list of available events.
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">(setq <strong>Events</strong> (key-list (events-items e)))
+</pre>
+
+<hr />
+<a name="events2enlsp2fevent2ditems"></a>
+<a name="robo20"></a><h2>events.nlsp/event-items [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo34">events.nlsp</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>event-items</strong> 
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Contains all the events and its bound command. The bound command 
+     is obtained from the event loop handler
+
+  INPUT
+     e - event - Used for variable substitution for macro creation
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     Case statement mapping an event name to a piece of logic.
+</pre>
+
+<hr />
+<a name="wmii5fnewlisp2fevents2enlsp"></a>
+<a name="robo34"></a><h2>wmii_newlisp/events.nlsp [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>events.nlsp</strong> 
+</pre>
+<p class="item_name">SYNOPSIS</p>
+<pre>    A replacement wmii handler in newlisp. 
+
+    This file contains all the code related to windoe manager "events"
+    handlers. These are window manager events that *not* user visible
+</pre>
+<p class="item_name">AUTHOR</p>
+<pre>    Luis R. Anaya
+</pre>
+<p class="item_name">COPYRIGHT</p>
+<pre>    (c) 2012 by Luis R. Anaya
+ 
+ $RCSfile: <strong>events.nlsp</strong> $
+ $Revision: 1.0 $
+ $Date: $
+ Author: $
+</pre>
+
+<hr />
+<a name="action2ditems2fexec"></a>
+<a name="robo0"></a><h2>action-items/exec [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">action-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>exec</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Executes dmenu, used to obtain the name of an executable and spawn it to
+   background. 
+</pre>
+
+<hr />
+<a name="action2ditems2fexec2dterm"></a>
+<a name="robo1"></a><h2>action-items/exec-term [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">action-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>exec-term</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Executes dmenu, used to obtain the name of an executable runs it in a 
+   terminal.
+</pre>
+
+<hr />
+<a name="action2ditems2fquit"></a>
+<a name="robo2"></a><h2>action-items/quit [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">action-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>quit</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Quits from the window manager
+</pre>
+
+<hr />
+<a name="action2ditems2fstatus"></a>
+<a name="robo3"></a><h2>action-items/status [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo5">action-items</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>status</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>   Forked on start, it is used to write the <strong>status</strong> in the lower right hand
+   corder of the window manager. The default definition
+   is in newlisp/wmiirc
+</pre>
+
+<hr />
+<a name="actions2enlsp2fAction"></a>
+<a name="robo4"></a><h2>actions.nlsp/Action [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">actions.nlsp</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>Action</strong>
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Evaluates the macro and executes the selected action.
+
+  INPUT
+     a - action - A list containing the action to perform.
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     <strong>Action</strong> is executed.
+</pre>
+
+<hr />
+<a name="actions2enlsp2faction2ditems"></a>
+<a name="robo5"></a><h2>actions.nlsp/action-items [ Functions ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">actions.nlsp</a> ] [ Functions ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>action-items</strong> 
+</pre>
+<p class="item_name">DESCRIPTION</p>
+<pre>     Contains all the actions and its bound command name. The bound command 
+     is extracted and piped through dmenu/wimenu 
+
+  INPUT
+     a - action - Used for variable substitution for macro creation
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre>     Case statement mapping an action name to a piece of logic.
+</pre>
+
+<hr />
+<a name="actions2enlsp2fActions"></a>
+<a name="robo6"></a><h2>actions.nlsp/Actions [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">actions.nlsp</a> ] [ Variables ]</p>
+<p class="item_name">NAME</p>
+<pre>   Contains list of available actions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">(setq <strong>Actions</strong> (key-list (<a href="#robo5">action-items</a> a)))
+</pre>
+
+<hr />
+<a name="wmii5fnewlisp2factions2enlsp"></a>
+<a name="robo33"></a><h2>wmii_newlisp/actions.nlsp [ Generics ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ Generics ]</p>
+<p class="item_name">NAME</p>
+<pre>   <strong>actions.nlsp</strong> 
+</pre>
+<p class="item_name">SYNOPSIS</p>
+<pre>    A replacement wmii handler in newlisp. 
+    This file contains all the code related to window manager "actions" 
+    handlers. These are window manager events that user visible
+</pre>
+<p class="item_name">AUTHOR</p>
+<pre>    Luis R. Anaya
+</pre>
+<p class="item_name">COPYRIGHT</p>
+<pre>    (c) 2012 by Luis R. Anaya
+ 
+ $RCSfile: <strong>actions.nlsp</strong> $
+ $Revision: 1.0 $
+ $Date: $
+ Author: $
+</pre>
+
+<div id="footer">
+<p>Generated from ./wmii_newlisp/ with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.38 on Sun May 06 2012 10:57:48
+</p>
+</div> <!-- footer -->
+</body>
+</html>
