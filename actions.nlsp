@@ -1,5 +1,39 @@
+;***** wmii_newlisp/actions.nlsp
+;
+; NAME 
+;   wmii_newlisp/actions.nlsp 
+; 
+; SYNOPSIS 
+;    A replacement wmii handler in newlisp. 
+;    This file contains all the code related to windoe manager "actions" 
+;    handlers. These are window manager events that user visible
+;    
+;
+; AUTHOR 
+;    Luis R. Anaya
+; 
+; COPYRIGHT 
+;    (c) 2012 by Luis R. Anaya
+; 
+;*****
 
-; Actions
+;****f*
+;
+; NAME 
+;   action-items 
+;
+;  DESCRIPTION
+;     Contains all the actions and its bound command. The bound command 
+;     is extracted and piped through dmenu/wimenu 
+;
+;  INPUT
+;     a - action - Used for variable substitution for macro creation
+; 
+;  OUTPUT
+;     Case statement mapping an action name to a procedure.
+; 
+;*****
+
 
 
 (define-macro (action-items a)
@@ -7,6 +41,15 @@
     (setq resultado 
 	  (append resultado (list 
 
+;*****
+;
+; NAME
+;   quit
+;
+; DESCRIPTION
+;   Quits from the window manager
+;
+;*****
 		  '("quit"
 		    (begin 
 		      (! "wmiir xwrite /ctl quit")
@@ -15,16 +58,52 @@
 		      (exit 0))
 		    )
 
+;*****
+; 
+; NAME
+;   exec
+; 
+; DESCRIPTION
+;   Executes dmenu, used to obtain the name of an executable and spawn it to
+;   background. 
+;
+;*****
+
 		  '("exec"
 		    (begin 
 		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
 		    )
+;*****
+; 
+; NAME
+;   exec-term
+; 
+; DESCRIPTION
+;   Executes dmenu, used to obtain the name of an executable runs it in a 
+;   terminal.
+;
+;*****
+
 
 		  '("exec-term"
 		    (begin
 		      (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
 		      
 		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice )) ))
+
+;*****
+;
+; NAME
+;   status
+;
+; DESCRIPTION
+;   Forked on start, it is used to write the status in the lower right hand
+;   corder of the window manager. The default definition
+;   is in newlisp/wmiirc
+;   
+;
+;*****
+
 
 		  '("status"
 		    (begin 
@@ -40,9 +119,32 @@
     resultado)
 )
 
-
+;*****
+; NAME
+;   Contains list of available actions
+;   
+; SOURCE
 
 (setq Actions (key-list (action-items a)))
+
+;*****
+
+;****f*
+;
+; NAME 
+;   Action
+;
+;  DESCRIPTION
+;     Evaluates the macro and executes the selected action.
+;
+;  INPUT
+;     a - action - A list containing the action to perform
+; 
+;  OUTPUT
+;     Action is executed.
+; 
+;*****
+
 
 (define (Action a)
   (eval (action-items a))
