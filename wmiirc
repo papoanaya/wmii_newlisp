@@ -1,5 +1,33 @@
 #!/opt/bin/env newlisp
-; Configure wmii
+;****** wmii_newlisp/wmiirc
+;
+; NAME 
+;   wmiirc
+; 
+; SYNOPSIS 
+;    A replacement wmii handler in newlisp. 
+;    
+;    This file contains all the global configuration file.
+;    
+; AUTHOR 
+;    Luis R. Anaya
+; 
+; COPYRIGHT 
+;    (c) 2012 by Luis R. Anaya
+;
+; NOTES
+;    Ideally this should contain configuration, but some of these routines should be in
+;    wmii.nlsp to be not user facing.
+; 
+;******
+
+;****** wmiirc/cofigurable_parameters
+;
+;  NOTES 
+;    User configurable parameters
+;
+;  SOURCE
+
 (setq wmiiscript "wmiirc") 
 
 # Configuration Variables
@@ -8,6 +36,9 @@
 (setq DOWN "j")
 (setq LEFT "h")
 (setq RIGHT "l")
+
+;******
+
 
 # Bars
 (setq noticetimeout 5)
@@ -18,6 +49,14 @@
 ;export WMII_FOCUSCOLORS='#000000 #81654f #000000'
 ;export WMII_BACKGROUND='#333333'
 
+;****** wmiirc/colors
+;
+;  NOTES 
+;    Color, fonts and terminal definitions are here.
+;
+;  SOURCE
+
+
 (setq WMII_NORMCOLORS "\#bbbbbb \#222222 \#444444" )
 (setq WMII_FOCUSCOLORS "\#eeeeee \#005577 \#005577 " )
 (setq WMII_BACKGROUND "\#0C0C0C")
@@ -25,6 +64,16 @@
 (setq WMII_FONT "-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*")
 
 (setq WMII_TERM "xterm")
+
+;******
+
+;****** wmiirc/operational_global_variables
+;
+;  NOTES 
+;    Operational variables. Not for user use. 
+;
+;  SOURCE
+
 (setq WMII_HOME nil)
 
 (setq pid nil)
@@ -42,6 +91,15 @@
 (constant 'SIGSTOP 19)
 (constant 'SIGTERM 15)
 
+;******
+
+
+;****** wmiirc/exception_handling
+;
+;  NOTES 
+;    Exception handling routine, currently stubbed. 
+;
+;  SOURCE
 
 (define (ctrlC-handler)
   (destroy pid)
@@ -57,11 +115,27 @@
 ;(signal SIGSTOP 'ctrlC-handler)
 ;(signal SIGTERM 'ctrlC-handler)
 
+;******
+
+;****** wmiirc/home_directory
+;
+;  NOTES 
+;    Determine home directory
+;
+;  SOURCE
 
 (if (not (nil? (env "WMII_CONFPATH")))
     (setq WMII_HOME (first (parse (env "WMII_CONFPATH" )  ":")))
 )
 
+;******
+
+;****** wmiirc/create_config
+;
+;  NOTES 
+;    Create configuration file in home directory
+;
+;  SOURCE
 
 (if (not (directory? WMII_HOME))
     (begin
@@ -83,9 +157,32 @@
       )
 )
 
+;******
+
+
+;****** wmiirc/history
+;
+;  NOTES 
+;    History file location. Not in use
+; 
+;
+;  SOURCE
+
+
 # Menu history
 (setq hist (append WMII_HOME "/history"))
 (setq histnum 5000)
+
+;******
+
+;****** wmiirc/ixp_defaults
+;
+;  NOTES 
+;    Default values in the ixp file system.
+; 
+;
+;  SOURCE
+
 
 # Column Rules - the easy way
 (! "
@@ -102,36 +199,81 @@ wmiir write /tagrules <<!
 !"
 )
 
+;******
+
+;****f* wmiirc/status
+;
+;  NAME 
+;   status
+;
+;  DESCRIPTION
+;     Displays status in the lower right hand corner. 
+;     It defaults to load and date. 
+;
+;  INPUT
+;     None
+; 
+;  OUTPUT
+;     Load "|" Date
+;   
+;  NOTES 
+;     Other status types and variables can be used.
+;     It gets forked by newlisp and runs on the background.
+; 
+;******
+
 # Status Bar Info
 (define (status)
   (append (last (parse (first (exec "uptime")) ":")) " | " (date))
 )
 
+
+;****** wmiirc/remaining
+; 
+;  NOTES
+;     The remaining code is non user configurable. It:
+;     * Loads user configuration.
+;     * set up status and colors.
+;     * loads libraries
+;     * load workspaces
+;     * runs event loop.
+;
+;******
+
+;****** wmiirc/user_configuration
+; 
+;  NOTES
+;     Load user configuration. Not really too useful for now.
+;     But it is there. 
+;  
+;  SOURCE
+
 (define (local_events) 1)
-; this will have to change.
-;(wi_runconf -s wmiirc_local)
 
-(load (append WMII_HOME "/wmiirc_local"))
+(catch 
+ (load (append WMII_HOME "/wmiirc_local")) 'result)
 
-;; 
-;; Half of these pipes need to be done with pipe rather than
-;; piping through shell
+;******
+
+;****** wmiirc/remaining
+; 
+;  NOTES
+;     The remaining code is non user configurable. It:
+;     * set up status and colors.
+;     * loads libraries
+;     * load workspaces
+;     * runs event loop.
+;
+;******
+
+
 
 (! (format "echo %s | wmiir create $noticebar" WMII_NORMCOLORS))
-
-
-; Event processing
-; These will be translated into a hash
 
 
 (dolist (dirtoload (parse (env "WMII_CONFPATH") ":"))
 	(catch (load (append dirtoload "/wmii.nlsp")) 'result)
 )
-
-
-;; needs to be expanded as a macro
-
-
 
 ; WM Configuration
 ; Still the easy way
@@ -160,8 +302,6 @@ wmiir write /ctl <<!
 ; action needs to be obtained
 
 (setq statuspid (fork (Action (list "status") )))
-
-;;wi_proglist $PATH >$progsfile &
 
 # Setup Tag Bar
 
