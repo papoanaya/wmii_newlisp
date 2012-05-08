@@ -517,7 +517,7 @@
 	    (setq resultado 
 		  (append resultado (list (list (eval (first binding)) (eval (nth 1 binding))))))
 	    )
-    resultado)
+    resultado))
     
 
 ;****v* keys.nlsp/Keys

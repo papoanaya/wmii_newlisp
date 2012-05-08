@@ -81,7 +81,7 @@
 		   '("CreateTag"
 		     (! 
 		      (format "echo '%s' %s | wmiir create \"/lbar/%s\"" 
-			      WMII_NORMCOLORS (last e) (last e)))
+			      WMII_NORMCOLORS (last e) (last e))))
 ;****** event-items/DestroyTag
 ;
 ; NAME
@@ -211,7 +211,7 @@
 		      (if (= resp "Kill")
 			  (exec (process 
 				 (format "wmiir xwrite /client/%s/ctl slay " client)))
-			  )))
+			  )) ) 
 
 
 ;****** event-items/Notice
@@ -262,7 +262,9 @@
 ;   
 ; SOURCE
 
+
 (setq Events (key-list (events-items e)))
+
 
 ;******
 

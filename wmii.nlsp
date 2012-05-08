@@ -459,6 +459,7 @@
 ;
 ; SOURCE     
 
+(println a-line)
 		  (cond 
 		   ((= "Key" commando ) (Key (nth 1 a-line)))
 		   ((= "Quit" commando)
