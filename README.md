@@ -42,7 +42,7 @@ to check for process but it may be a bit expensive to run for
 every transaction. A solution is being researched. 
 
 * Move from the shell implementation to direct libixp calls. Should improve
-performance at the expense of memory consumptions. This is a long term
+performance at the expense of memory consumption. This is a long term
 objective. 
 
 * Dmenu is being used rather than the default wmimenu. This is because 
@@ -63,37 +63,38 @@ In this case, your mileage may vary and depends on the amount
 of desired user intervention.
 
 If installing wmii from a packaged repository (apt, deb, pkg_man, etc)
-it will install the shell version by default.  If compiling from source, 
-the installation step will create those as well and store them in /etc. 
+it will install the shell version by default.  If compiling from source 
+downlaoded from http://wmii.suckless.org, then the installation step 
+will create those as well and store them in /etc. 
 
 If you are *still* inclined to install and use the wmii_newlisp scripts
 use the following steps that are not newbie friendly. (I apologize
-for that, but suckless tools are catered for experienced UNIX users
-and I am following suit.). 
+for that, but suckless tools are catered for experienced UNIX users. I 
+am following suit.). 
 
 1. Install newlisp in a path accessible location (/usr/bin, /usr/local/bin)
 
-1. Install dmenu in a path accessible location. (http://dwm.suckless.org)
+2. Install dmenu in a path accessible location. (http://dwm.suckless.org)
 
-1. Locate the directory where the wmii configuration is located, usually in 
+3. Locate the directory where the wmii configuration is located, usually in 
 /etc/wmii or in /etc/X11/wmii
 
-1. Save a copy of the aforementioned wmii configuration directory.
+4. Save a copy of the aforementioned wmii configuration directory.
 
-1. Copy all the provided scripts by the wmii_newlisp package in the wmii 
+5. Copy all the provided scripts by the wmii_newlisp package in the wmii 
 configuration directory.
 
-1. Make wmiirc executable by typing: chmod 755 wmiirc.
+6. Make wmiirc executable by typing: chmod 755 wmiirc.
 
-1.  Restart your window manager session and select to start wmii   This can be 
+7.  Restart your window manager session and select to start wmii   This can be 
 either by: Selecting wmii in your desktop manager or starting wmii directly 
 after exiting from your running window manager.
 
-1. Test. 
+8. Test. 
 
 Ideally you should test by executing wmii against Xnest to ensure that the
 handlers are working before using it for daily use. For additional 
-documentation, go to http//wmii.suckless.org/. The documentation contains
+documentation, go to http://wmii.suckless.org/. The documentation contains
 a list of wmii key bindings and list of available functionalities.
 
 License
@@ -101,4 +102,4 @@ License
 This code has been developed under the terms and conditions of the 
 GNU Public License version 3.0 as described in the license file (LICENSE) 
 included in the distribution.  Even though this software is harboring itself
-under this license, it is in no part of the Gnu family of software offerings. 
+under this license, it is in no part of the Gnu software offerings. 
