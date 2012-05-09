@@ -31,7 +31,7 @@ Known Issues
 
 The following are known issues that will be addressed as time permits:
 
-* Changed current macro implementation to a dictionary. This allows
+* Change current macro implementation to a dictionary. This allows
 for improved execution performance and the ability to add 
 features without the need of a restart.
 
