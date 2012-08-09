@@ -52,7 +52,7 @@
 ;******
 
     ("Client-3-Delete"
-     (! (format "wmiir xwrite /client/%s/ctl kill" (last m) )))
+     (! (format "wmiir xwrite /client/%s/ctl kill" (last m))))
 
 
 ;****** menu-operations/Client-3-Kill
@@ -94,7 +94,7 @@
 ;******
   
     ("LBar-1-Click"
-     (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)) )) )
+     (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)))))
 
 ;****** menu-operations/LBar-3-Delete
 ;
@@ -107,7 +107,6 @@
 ;
 ;******
 
-
     ("LBar-3-Delete"
      (begin
        (setq tag (nth 1 m))
@@ -115,26 +114,21 @@
        (setq clients 
 	     (exec 
 	      (format "wmiir read /tag/%s/index | awk '!/^#/{print $2}'"
-		      tag )))
+		      tag)))
 
        (dolist (c clients)
 	       (if (= tag 
 		      (first (exec 
-			      (format "wmiir read /client/%s/tags" c))
-			     ))
+			      (format "wmiir read /client/%s/tags" c))))
 		   (! (format "wmiir xwrite /client/%s/ctl kill" c))
 		   (! (format "wmiir xwrite /client/%s/tags -%s" 
-			      c tag))
-		   )
+			      c tag)))
 	       (if (= 
 		    tag (wi_seltag))
 		   (begin
 		     (setq newtag 
-			   (wi_tags)); needs to be completed
-		     (setq "wmiir xwrite /ctl view %s" newtag)))
-	       )) )
-    ) )
- 
+			   (wi_tags))
+		     (setq "wmiir xwrite /ctl view %s" newtag))))))))
 
 ;****f* menu.nlsp/menu-items
 ;
@@ -155,7 +149,6 @@
 ;******
 
 (define-macro (menu-items m)
-# Menus
   (let ((resultado (list 'case (list 'first m))))
     (setq resultado 
 	  (append resultado 
@@ -182,7 +175,7 @@
 		     (begin 
 		       (setq options '("Delete" "Kill" "Fullscreen"))
 		       (fork (wi_fnmenu "Client" 
-					    (nth 1 m) (nth 2 m) options)) ))
+					    (nth 1 m) (nth 2 m) options))))
 
 ;****** menu-items/LeftBarMouseDown
 ;
@@ -206,7 +199,7 @@
 		   '("LeftBarMouseDown"
 		     (begin 
 		       (setq options '("Delete"))
-		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options)) ))
+		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
 ;****** menu-items/LeftBarClick
 ;
@@ -229,12 +222,9 @@
 		   '("LeftBarClick"
 		     (begin 
 		       (setq options '() )
-		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options)) ))
+		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
-		   '("" true)
-		   )
-		  )
-	  )
+		   '("" true))))
     resultado))
 
 ;****v* menu.nlsp/Menus
@@ -266,5 +256,4 @@
 ;******
 
 (define (Menu m)
-  (eval (menu-items m))
-)
+  (eval (menu-items m)))
