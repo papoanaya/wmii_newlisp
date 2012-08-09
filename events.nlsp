@@ -1,47 +1,47 @@
 ;****** wmii_newlisp/events.nlsp
 ;
-; NAME 
-;   events.nlsp 
-; 
-; SYNOPSIS 
-;    A replacement wmii handler in newlisp. 
+; NAME
+;   events.nlsp
+;
+; SYNOPSIS
+;    A replacement wmii handler in newlisp.
 ;
 ;    This file contains all the code related to windoe manager "events"
 ;    handlers. These are window manager events that *not* user visible
-;    
 ;
-; AUTHOR 
+;
+; AUTHOR
 ;    Luis R. Anaya
-; 
-; COPYRIGHT 
+;
+; COPYRIGHT
 ;    (c) 2012 by Luis R. Anaya
-; 
+;
 ;******
 
 ;****f* events.nlsp/event-items
 ;
-; NAME 
-;   event-items 
+; NAME
+;   event-items
 ;
 ;  DESCRIPTION
-;     Contains all the events and its bound command. The bound command 
+;     Contains all the events and its bound command. The bound command
 ;     is obtained from the event loop handler
 ;
 ;  INPUTS
 ;     e - event - Used for variable substitution for macro creation
-; 
+;
 ;  OUTPUT
 ;     Case statement mapping an event name to a piece of logic.
-; 
+;
 ;*****
 
 
 
 (define-macro (events-items e)
   (let ((resultado (list 'case (list 'first e))))
-    (setq resultado 
+    (setq resultado
 	  (append resultado
-		  (list     
+		  (list
 ;***** event-items/Start
 ;
 ; NAME
@@ -55,10 +55,10 @@
 		   '("Start"
 		    (if (= (nth 1 e) wmiiscript)
 			(exit)))
-;****** event-items/Key 
+;****** event-items/Key
 ;
 ; NAME
-;   Key   
+;   Key
 ;
 ; DESCRIPTION
 ;   Key handler - not in use.
@@ -79,8 +79,8 @@
 ;******
 
 		   '("CreateTag"
-		     (! 
-		      (format "echo '%s' %s | wmiir create \"/lbar/%s\"" 
+		     (!
+		      (format "echo '%s' %s | wmiir create \"/lbar/%s\""
 			      WMII_NORMCOLORS (last e) (last e))))
 ;****** event-items/DestroyTag
 ;
@@ -88,13 +88,13 @@
 ;   DestroyTag
 ;
 ; DESCRIPTION
-;   Destroys a workspace. 
+;   Destroys a workspace.
 ;
 ;*****
 
 
-		   '("DestroyTag" 
-		    (! 
+		   '("DestroyTag"
+		    (!
 		     (format "wmiir remove \"/lbar/%s\"" (last e))))
 
 ;****** event-items/FocusTag
@@ -108,9 +108,9 @@
 ;*****
 
 
-		   '("FocusTag" 
+		   '("FocusTag"
 		    (!
-		     (format "wmiir xwrite \"/lbar/%s\" '%s' \"%s\"" 
+		     (format "wmiir xwrite \"/lbar/%s\" '%s' \"%s\""
 			     (last e) WMII_FOCUSCOLORS (last e))))
 
 ;****** event-items/UnFocusTag
@@ -123,9 +123,9 @@
 ;
 ;*****
 
-		   '("UnfocusTag" 
-		    (! 
-		     (format "wmiir xwrite \"/lbar/%s\" '%s' \"%s\" " 
+		   '("UnfocusTag"
+		    (!
+		     (format "wmiir xwrite \"/lbar/%s\" '%s' \"%s\" "
 			     (last e) WMII_NORMCOLORS (last e))))
 
 ;****** event-items/UrgentTag
@@ -134,14 +134,14 @@
 ;   UrgentTag
 ;
 ; DESCRIPTION
-;   Adds an asterisk into a workspace when an urgent message is 
+;   Adds an asterisk into a workspace when an urgent message is
 ;   detected by the window manager.
 ;
 ;******
 
 
 		   '("UrgentTag"
-		    (! 
+		    (!
 		     (format "wmiir xwrite \"/lbar/%s\" \"*%s\"" (last e) (last e))))
 
 ;****** event-items/NotUrgentTag
@@ -150,18 +150,18 @@
 ;   NotUrgentTag
 ;
 ; DESCRIPTION
-;   Removes an asterisk into a workspace when an urgent message is 
+;   Removes an asterisk into a workspace when an urgent message is
 ;   expired.
 ;
 ;******
 
-  
-		   '("NotUrgentTag"	
+
+		   '("NotUrgentTag"
 		    (!
 		     (format "wmiir xwrite \"/lbar/%s\" \"%s\"" (last e) (last e))))
 
 
-;****** event-items/LeftBarDND 
+;****** event-items/LeftBarDND
 ;
 ; NAME
 ;  LeftBarClick LeftBarDND
@@ -173,7 +173,7 @@
 
 
 
-		   '("LeftBarClick LeftBarDND" 
+		   '("LeftBarClick LeftBarDND"
 		    '(! (format "wmiir xwrite /ctl view \"%s\"" (last e))))
 
 
@@ -188,30 +188,28 @@
 ;
 ;******
 
-
-		   '("Unresponsive" 
+		   '("Unresponsive"
 		    (let
 			((client (first e)))
 		      (setq e (last e))
-		      (setq msg 
+		      (setq msg
 			    (append "The following client is not responding."
 				    "What would you like to do?\n"))
 
 		      (setq read-label
 			    (first (exec "wmiir read /client/sel/label")))
 
-		      (setq resp 
+		      (setq resp
 			    (exec ;client WMII_FONT msg
-			     (format 
+			     (format
 			      (append "wihack -transient %s "
 				      "xmessage -nearmouse -buttons Kill,Wait -print "
-				      "-fn %s %s %s" 
+				      "-fn %s %s %s"
 				      client wmii_font msg read-label))))
 
 		      (if (= resp "Kill")
-			  (exec (process 
-				 (format "wmiir xwrite /client/%s/ctl slay " client)))
-			  )) ) 
+			  (exec (process
+				 (format "wmiir xwrite /client/%s/ctl slay " client))))))
 
 
 ;****** event-items/Notice
@@ -225,18 +223,15 @@
 ;
 ;******
 
-
 		   '("Notice"
 		    (begin
 		      (! (format "wmiir xwrite %s %s"  noticebar wi_arg))
-		      (catch 
+		      (catch
 		       (destroy xpid))
-		      (setq xpid 
-			    (fork 
+		      (setq xpid
+			    (fork
 			     (sleep (* noticetimeout 1000))
-			     (format "wmiir xwrite %s  " noticebar)))
-		      )
-		    )
+			     (format "wmiir xwrite %s  " noticebar)))))
 ;****** event-items/Termination
 ;
 ; NAME
@@ -248,18 +243,14 @@
 ;******
 
 
-		   '("" true)
-		   )
-		  )
-	  )
-    resultado)
-)
+		   '("" true))))
+    resultado))
 
 
 ;****v* events.nlsp/Events
 ; NAME
 ;   Contains list of available events.
-;   
+;
 ; SOURCE
 
 
@@ -271,7 +262,7 @@
 
 ;****f* events.nlsp/Event
 ;
-; NAME 
+; NAME
 ;   Event
 ;
 ;  DESCRIPTION
@@ -279,12 +270,11 @@
 ;
 ;  INPUTS
 ;     e - event - A list containing the event to perform.
-; 
+;
 ;  OUTPUT
 ;     Event is executed.
-; 
+;
 ;*****
 
 (define (Event e)
-  (eval (events-items e))
-)
+  (eval (events-items e)))
