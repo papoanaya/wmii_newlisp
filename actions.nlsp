@@ -55,8 +55,7 @@
 		      (! "wmiir xwrite /ctl quit")
 		      (destroy pid)
 		      (destroy statuspid)
-		      (exit 0))
-		    )
+		      (exit 0)))
 
 ;****** action-items/exec
 ; 
@@ -71,8 +70,7 @@
 
 		  '("exec"
 		    (begin 
-		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
-		    )
+		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
 ;****** action-items/exec-term
 ; 
 ; NAME
@@ -89,7 +87,7 @@
 		    (begin
 		      (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
 		      
-		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice )) ))
+		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice ))))
 
 ;****** action-items/status
 ;
@@ -113,11 +111,8 @@
 		      (setq rc 0)		 
 		      (while (= rc 0)
 			     (setq rc (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
-			     (sleep 1000) ) 
-		      ))
-		  )))
-    resultado)
-)
+			     (sleep 1000)))))))
+    resultado))
 
 ;****v* actions.nlsp/Actions
 ;
@@ -148,5 +143,4 @@
 
 
 (define (Action a)
-  (eval (action-items a))
-)
+  (eval (action-items a)))
