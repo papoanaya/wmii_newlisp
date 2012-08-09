@@ -59,11 +59,10 @@
 			    (list (list 
 				  (eval (list 'format "%s-%d" MODKEY i))
 
-				  (list '! (format "wmiir xwrite /ctl view \"%d\"" i )) ))
+				  (list '! (format "wmiir xwrite /ctl view \"%d\"" i))))
 				 (list (list 
 				  (eval (list 'format "%s-Shift-%d" MODKEY i))
-				  (list '! (format "wmiir xwrite /client/sel/tags \"%d\"" i ))
-				  )) )))
+				  (list '! (format "wmiir xwrite /client/sel/tags \"%d\"" i)))))))
 
 
     (setq key_bindings 
@@ -79,7 +78,6 @@
 ;  
 ;
 ;******
-
 
 	   '((format  "%s-%s" MODKEY LEFT)
 	     (list '! "wmiir xwrite /tag/sel/ctl select left"))
@@ -341,8 +339,7 @@
 	     (list 'begin '(! "wmiir xwrite /ctl quit")
 		   '(destroy pid)
 		   '(destroy statuspid)
-		   '(exit 0)
-	     ))
+		   '(exit 0)))
     
 ;****** key-items/Mod-Return
 ;
@@ -386,10 +383,7 @@
 			(begin
 			  (setq menu_choice (first menu_choice))
 			  (fork (Action  (list menu_choice)))
-			  (if (= menu_choice "quit") (exit 0)) )) 
-			  
-		   )
-	     )
+			  (if (= menu_choice "quit") (exit 0))))))
 
 ;****** key-items/Mod-t
 ;
@@ -417,16 +411,12 @@
 
 		   '(setq menu_choice
 			   (exec (format 
-				  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" tags )))
+				  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" tags)))
 
 		   '(if (not (= menu_choice '()))
 			(begin
 			  (setq menu_choice (first menu_choice))
-			  (fork (! (format "wmiir xwrite /ctl view %s" menu_choice))) ))
-		     
-		   )
-	     )
-
+			  (fork (! (format "wmiir xwrite /ctl view %s" menu_choice)))))))
 
 ;****** key-items/Mod-Shift-t
 ;
@@ -449,7 +439,7 @@
 	     (list 'begin
 		   '(setq wt (wi_tags))
 		   '(setq c (wi_selclient))
-		   '(if (not (= wt '() ))
+		   '(if (not (= wt '()))
 			  (setq tags (convert-to-newline-string (wi_tags))))
 
 		   '(setq menu_choice
@@ -459,11 +449,7 @@
 		   '(if (not (= menu_choice '()))
 			(begin
 			  (setq menu_choice (first menu_choice))
-			  (fork (! (format "wmiir xwrite /client/%s/tags %s" c menu_choice))) ))
-		     
-		   )
-	     )
-
+			  (fork (! (format "wmiir xwrite /client/%s/tags %s" c menu_choice)))))))
 
 ;****** key-items/Mod-e
 ;
@@ -503,20 +489,15 @@
 		      (begin 
 					; what are Keys?
 			(! (format "echo -n \"%s\" | wmiir write /keys" Keys))
-			(! (format "wmiir xwrite /ctl grabmod %s" MODKEY))
-			))
+			(! (format "wmiir xwrite /ctl grabmod %s" MODKEY))))
 		     (true (begin
 			  (! (format "wmiir xwrite /keys %s-Control-t" MODKEY))
-			  (! "wmiir xwrite /ctl grabmod Mod3")))
-		     ))
-	     )
-	   '("" true)
-	   ))
+			  (! "wmiir xwrite /ctl grabmod Mod3"))))))
+	   '("" true)))
 
     (dolist (binding key_bindings)
 	    (setq resultado 
-		  (append resultado (list (list (eval (first binding)) (eval (nth 1 binding))))))
-	    )
+		  (append resultado (list (list (eval (first binding)) (eval (nth 1 binding)))))))
     resultado))
     
 
@@ -551,5 +532,4 @@
 
 
 (define (Key k)
-  (eval (key-items k))
-)
+  (eval (key-items k)))
