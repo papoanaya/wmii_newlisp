@@ -1,22 +1,22 @@
-;****** wmii_newlisp/menu.nlsp
-;
-; NAME 
-;   menu.nlsp
-; 
-; SYNOPSIS 
-;    A replacement wmii handler in newlisp. 
-;    This file contains all the code related to window manager "menu"
-;    handlers. This file defines menu operations that are run through
-;    wmii9menu.
-;    
-;
-; AUTHOR 
-;    Luis R. Anaya
-; 
-; COPYRIGHT 
-;    (c) 2012 by Luis R. Anaya
-; 
-;******
+;;****** wmii_newlisp/menu.nlsp
+;;
+;; NAME 
+;;   menu.nlsp
+;; 
+;; SYNOPSIS 
+;;    A replacement wmii handler in newlisp. 
+;;    This file contains all the code related to window manager "menu"
+;;    handlers. This file defines menu operations that are run through
+;;    wmii9menu.
+;;    
+;;
+;; AUTHOR 
+;;    Luis R. Anaya
+;; 
+;; COPYRIGHT 
+;;    (c) 2012 by Luis R. Anaya
+;; 
+;;******
 
 ;****f* menu.nlsp/menu-operations
 ;
@@ -36,10 +36,12 @@
 ; 
 ;******
 
-
-
-(define (menu-operations m)
-  (case (first m)
+(setq menu-operations
+      ("Client-3-Delete" client-3-delete)
+      ("Client-3-Kill" client-3-kill)
+      ("Client-3-Fullscreen" client-3-fullscreen)
+      ("LBar-1-Click" lbar-1-click)
+      ("LBar-3-Delete" lbar-3-delete))
 
 ;****** menu-operations/Client-3-Delete
 ;
@@ -51,10 +53,8 @@
 ;
 ;******
 
-    ("Client-3-Delete"
-     (! (format "wmiir xwrite /client/%s/ctl kill" (last m))))
-
-
+(define (client-3-delete m)
+  (! (format "wmiir xwrite /client/%s/ctl kill" (last m))))
 ;****** menu-operations/Client-3-Kill
 ;
 ; NAME
@@ -66,8 +66,8 @@
 ;******
 
 
-    ("Client-3-Kill"
-     (! (format "wmiir xwrite /client/$s/ctl slay" (last m))))
+(define (client-3-kill m)
+  (! (format "wmiir xwrite /client/$s/ctl slay" (last m))))
 
 ;****** menu-operations/Client-3-Fullscreen
 ;
@@ -79,8 +79,8 @@
 ;
 ;******
 
-    ("Client-3-Fullscreen"
-     (! (format "wmiir xwrite /client/%s/ctl fullscreen on" (last m))))
+(define (client-3-fullscreen)
+  (! (format "wmiir xwrite /client/%s/ctl fullscreen on" (last m))))
 
 ;****** menu-operations/LBar-1-Click
 ;
@@ -92,10 +92,9 @@
 ;   screen.
 ;
 ;******
-  
-    ("LBar-1-Click"
-     (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)))))
 
+(define (lbar-1-click m)
+  (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)))))
 ;****** menu-operations/LBar-3-Delete
 ;
 ; NAME
@@ -106,53 +105,28 @@
 ;   lower left had corner of the screen.
 ;
 ;******
+(define (lbar-3-delete m)
 
-    ("LBar-3-Delete"
-     (begin
-       (setq tag (nth 1 m))
+  (begin
+    (setq tag (nth 1 m))
+    (setq clients 
+          (exec 
+           (format "wmiir read /tag/%s/index | awk '!/^#/{print $2}'"
+                   tag)))
 
-       (setq clients 
-	     (exec 
-	      (format "wmiir read /tag/%s/index | awk '!/^#/{print $2}'"
-		      tag)))
-
-       (dolist (c clients)
-	       (if (= tag 
-		      (first (exec 
-			      (format "wmiir read /client/%s/tags" c))))
-		   (! (format "wmiir xwrite /client/%s/ctl kill" c))
-		   (! (format "wmiir xwrite /client/%s/tags -%s" 
-			      c tag)))
-	       (if (= 
-		    tag (wi_seltag))
-		   (begin
-		     (setq newtag 
-			   (wi_tags))
-		     (setq "wmiir xwrite /ctl view %s" newtag))))))))
-
-;****f* menu.nlsp/menu-items
-;
-;  NAME 
-;   menu-items
-;
-;  DESCRIPTION
-;     Contains all the actions and its bound mouse action.
-;
-;  INPUTS
-;     m - menu selection - Contains the variable used to create the case 
-;    statement. 
-;  
-; 
-;  OUTPUT
-;     Case statement mapping the mouse event to an operations is created.
-; 
-;******
-
-(define-macro (menu-items m)
-  (let ((resultado (list 'case (list 'first m))))
-    (setq resultado 
-	  (append resultado 
-		  (list 
+    (dolist (c clients)
+            (if (= tag 
+                   (first (exec 
+                           (format "wmiir read /client/%s/tags" c))))
+                (! (format "wmiir xwrite /client/%s/ctl kill" c))
+                (! (format "wmiir xwrite /client/%s/tags -%s" 
+                           c tag)))
+            (if (= 
+                 tag (wi_seltag))
+                (begin
+                  (setq newtag 
+                        (wi_tags))
+                  (setq "wmiir xwrite /ctl view %s" newtag))))))
 
 ;****** menu-items/ClientMouseDown
 ;
@@ -170,12 +144,11 @@
 ;
 ;******
 
-		   '("ClientMouseDown"
-		     
-		     (begin 
-		       (setq options '("Delete" "Kill" "Fullscreen"))
-		       (fork (wi_fnmenu "Client" 
-					    (nth 1 m) (nth 2 m) options))))
+(define (client-mouse-down m) 
+  (begin 
+    (setq options '("Delete" "Kill" "Fullscreen"))
+    (fork (wi_fnmenu "Client" 
+                     (nth 1 m) (nth 2 m) options))))
 
 ;****** menu-items/LeftBarMouseDown
 ;
@@ -195,11 +168,10 @@
 ;
 ;******
 
-
-		   '("LeftBarMouseDown"
-		     (begin 
-		       (setq options '("Delete"))
-		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
+(define (left-bar-mouse-down m)
+  (begin 
+    (setq options '("Delete"))
+    (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
 ;****** menu-items/LeftBarClick
 ;
@@ -219,13 +191,35 @@
 ;
 ;******
 
-		   '("LeftBarClick"
-		     (begin 
-		       (setq options '() )
-		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
+(define (left-bar-click m)
+  (begin 
+    (setq options '() )
+    (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
-		   '("" true))))
-    resultado))
+
+;****f* menu.nlsp/menu-items
+;
+;  NAME 
+;   menu-items
+;
+;  DESCRIPTION
+;     Contains all the actions and its bound mouse action.
+;
+;  INPUTS
+;     m - menu selection - Contains the variable used to create the case 
+;    statement. 
+;  
+; 
+;  OUTPUT
+;     Case statement mapping the mouse event to an operations is created.
+; 
+;******
+
+(setq menu-list
+      '(("ClientMouseDown" client-mouse-down)
+        ("LeftBarMouseDown" left-bar-mouse-down)
+        ("LeftBarClick" left-bar-click)
+        ("" true)))
 
 ;****v* menu.nlsp/Menus
 ;
@@ -235,7 +229,7 @@
 ; SOURCE
 
 
-(setq Menus (key-list (menu-items m)))
+(setq Menus (key-list (menu-list))
 
 ;******
 
@@ -256,4 +250,5 @@
 ;******
 
 (define (Menu m)
-  (eval (menu-items m)))
+  (setq function (nth 1 (assoc (first m) menu-list)))
+  (eval (list menu-list m)))
