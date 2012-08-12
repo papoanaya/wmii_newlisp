@@ -141,7 +141,6 @@
 ; 
 ;******
 
-
 (define (Action a)
-  (setq function (nth 1 (assoc a action-list) ) )
+  (setq function (nth 1 (assoc a action-list)))
   (eval (list function)))
