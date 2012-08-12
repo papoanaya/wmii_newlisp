@@ -17,10 +17,10 @@
 ;
 ;******
 
-;****f* actions.nlsp/action-items
+;****v* actions.nlsp/action-items
 ;
 ; NAME 
-;   action-items 
+;   action-list
 ;
 ;  DESCRIPTION
 ;     Contains all the actions and its bound command name. The bound command 
@@ -30,16 +30,15 @@
 ;     a - action - Used for variable substitution for macro creation
 ; 
 ;  OUTPUT
-;     Case statement mapping an action name to a piece of logic.
+;     Association list
 ; 
 ;******
+(setq action-list 
+      '(("quit" quit-action)
+        ("exec" exec-action)
+        ("exec-term" exec-status-action)
+        ("status" status)))
 
-
-
-(define-macro (action-items a)
-  (let ((resultado (list 'case (list 'first a))))
-    (setq resultado 
-	  (append resultado (list 
 
 ;****** action-items/quit
 ;
@@ -50,12 +49,13 @@
 ;   Quits from the window manager
 ;
 ;******
-		  '("quit"
-		    (begin 
-		      (! "wmiir xwrite /ctl quit")
-		      (destroy pid)
-		      (destroy statuspid)
-		      (exit 0)))
+
+(define (quit-action)
+  (begin 
+    (! "wmiir xwrite /ctl quit")
+    (destroy pid)
+    (destroy statuspid)
+    (exit 0)))
 
 ;****** action-items/exec
 ; 
@@ -68,9 +68,10 @@
 ;
 ;******
 
-		  '("exec"
-		    (begin 
-		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
+(define (exec-action)
+  (begin 
+    (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
+
 ;****** action-items/exec-term
 ; 
 ; NAME
@@ -83,11 +84,12 @@
 ;******
 
 
-		  '("exec-term"
-		    (begin
-		      (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
+(define (exec-term-action)
+
+  (begin
+    (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
 		      
-		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice ))))
+    (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice ))))
 
 ;****** action-items/status
 ;
@@ -102,17 +104,15 @@
 ;
 ;******
 
-
-		  '("status"
-		    (begin 
-		      (! "wmiir remove /rbar/status 2>/dev/null")
-		      (! (format "echo \"%s\" | wmiir create /rbar/status" 
-				 WMII_NORMCOLORS))
-		      (setq rc 0)		 
-		      (while (= rc 0)
-			     (setq rc (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
-			     (sleep 1000)))))))
-    resultado))
+(define (status-action)
+  (begin 
+    (! "wmiir remove /rbar/status 2>/dev/null")
+    (! (format "echo \"%s\" | wmiir create /rbar/status" 
+               WMII_NORMCOLORS))
+    (setq rc 0)		 
+    (while (= rc 0)
+           (setq rc (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
+           (sleep 1000))))
 
 ;****v* actions.nlsp/Actions
 ;
@@ -121,7 +121,7 @@
 ;   
 ; SOURCE
 
-(setq Actions (key-list (action-items a)))
+(setq Actions (key-list action-list))
 
 ;******
 
@@ -143,4 +143,5 @@
 
 
 (define (Action a)
-  (eval (action-items a)))
+  (setq function (nth 1 (assoc a action-list) ) )
+  (eval (list function)))
