@@ -68,21 +68,28 @@
 (define (wi_fnmenu loc cid carg options)
 
   (if (and (= carg "3")
-	  (not (= options '())))
+           (not (= options '())))
       (begin
-	(setq def_option (first options)) ;; Menu ops is on button 3
+        (setq def_option (first options)) ;; Menu ops is on button 3
+        (setq menu_items (let (mi "")
+                           (dolist (o options)
+                                   (setq mi (append mi o ":" o " " )))))
+        (setq res (exec 
+                   (format "wmii9menu -i \"%s\" %s " def_option menu_items)))
 
-	(setq menu_items (let (mi "")
-			   (dolist (o options)
-				   (setq mi (append mi o ":" o " " )))))
-	(setq res (exec (format "wmii9menu -i \"%s\" %s " def_option menu_items)))
-
-	(if (not (= res '()))
-	    (begin
-	      (setq res (first res))
-	      (menu-operations (list (format "%s-%s-%s" loc carg res) cid)))))
-	(begin
-	  (menu-operations (list (format "%s-%s-%s" loc carg "Click") cid)))))
+        (if  (!= res '())
+            (begin
+              (setq res (first res))
+              (setq function 
+                    (assoc (format "%s-%s-%s" loc carg res) menu-operations))
+              (when function 
+                    (eval (list (nth 1 function) 'cid))))
+            (begin
+              (setq function 
+                    (assoc (format "%s-%s-%s" loc carg "Click") menu-operations))
+              (when function 
+                    (eval 
+                     (list (nth 1 function) 'cid))))))))
 
 ;;****f* wmii.nlsp/wi_fatal
 ;;
