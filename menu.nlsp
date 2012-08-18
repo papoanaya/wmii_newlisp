@@ -191,7 +191,6 @@
 
 (define (left-bar-click m)
   (begin 
-    (println m)
     (setq options '() )
     (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
