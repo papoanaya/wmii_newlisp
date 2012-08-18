@@ -36,8 +36,8 @@
 (setq action-list 
       '(("quit" quit-action)
         ("exec" exec-action)
-        ("exec-term" exec-status-action)
-        ("status" status)))
+        ("exec-term" exec-term-action)
+        ("status" status-action)))
 
 
 ;;****** action-items/quit
@@ -111,7 +111,8 @@
                WMII_NORMCOLORS))
     (setq rc 0)		 
     (while (= rc 0)
-           (setq rc (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
+           (setq rc 
+                 (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
            (sleep 1000))))
 
 ;;****v* actions.nlsp/Actions
@@ -121,7 +122,7 @@
 ;;   
 ;; SOURCE
 
-(setq Actions (key-list action-list))
+(setq Actions (map 'first  action-list))
 
 ;;******
 

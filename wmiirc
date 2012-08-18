@@ -1,4 +1,4 @@
-#!/opt/bin/env newlisp
+#!/opt/home/papo/bin/newlisp
 ;;****** wmii_newlisp/wmiirc
 ;;
 ;; NAME 
@@ -275,7 +275,7 @@ wmiir write /ctl <<!
 	   WMII_FOCUSCOLORS
 	   WMII_NORMCOLORS
 	   MODKEY
-	   )
+	   ))
 
 (process (format "xsetroot -solid \"%s\""  WMII_BACKGROUND))
 

@@ -243,8 +243,7 @@
 ;; SOURCE
 
 
-(setq Events (key-list (event-list e)))
-
+(setq Events (map 'first event-list))
 
 ;;******
 
@@ -266,5 +265,5 @@
 ;;*****
 
 (define (Event e)
-  (setq function (nth 1 (assoc e event-list)))
-  (eval (list function e)))
+  (setq function (assoc (nth 0 e) event-list))
+  (eval (list (nth 1 function) 'e)))
