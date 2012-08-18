@@ -94,7 +94,7 @@
 ;;******
 
 (define (lbar-1-click m)
-  (! (format "wmiir xwrite /ctl view \"%d\"" (int (nth 2 m))))
+  (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)))))
 ;;****** menu-operations/LBar-3-Delete
 ;;
 ;; NAME
