@@ -1,338 +1,374 @@
-;****** wmii_newlisp/keys.nlsp
-;
-; NAME 
-;   keys.nlsp
-; 
-; SYNOPSIS 
-;    A replacement wmii handler in newlisp. 
-;    This file contains all the code related to key bindings and operations.
-;
-; AUTHOR 
-;    Luis R. Anaya
-; 
-; COPYRIGHT 
-;    (c) 2012 by Luis R. Anaya
-; 
-;******
+;;****** wmii_newlisp/keys.nlsp
+;;
+;; NAME 
+;;   keys.nlsp
+;; 
+;; SYNOPSIS 
+;;    A replacement wmii handler in newlisp. 
+;;    This file contains all the code related to key bindings and operations.
+;;
+;; AUTHOR 
+;;    Luis R. Anaya
+;; 
+;; COPYRIGHT 
+;;    (c) 2012 by Luis R. Anaya
+;; 
+;;******
 
-;****f* keys.nlsp/key-items
-;
-;  NAME 
-;  key-items
-;
-;  DESCRIPTION
-;     This macro builds the list of the operations that relate to key
-;     bindings. 
-;
-;  INPUTS
-;     k - key stroke - Contains a list with the key stroke and arguments
-;  
-; 
-;  OUTPUT
-;     Cast statement containing the key stroke and operations. 
-; 
-;******
+;;****f* keys.nlsp/key-items
+;;
+;;  NAME 
+;;  key-items
+;;
+;;  DESCRIPTION
+;;     This macro builds the list of the operations that relate to key
+;;     bindings. 
+;;
+;;  INPUTS
+;;     k - key stroke - Contains a list with the key stroke and arguments
+;;  
+;; 
+;;  OUTPUT
+;;     Cast statement containing the key stroke and operations. 
+;; 
+;;******
 
 
-(define-macro (key-items k)
-  (let ((resultado (list 'case k)))
+(define (select-tag i)
+  (! (format "wmiir xwrite /ctl view \"%d\"" i)))
 
-;****** key-items/Tags-0-to-9
-;
-; NAME
-;   Tags-0-to-9
-;
-; DESCRIPTION
-;   Loop that creates key for workspace operations.
-;  
-; NOTES
-;   Creates bindings to move clients among workspaces and 
-;   create new ones with a number from 0 to 9.
-;   
-;
-;******
+
+(define (select-shift-tag i)
+  (! (format "wmiir xwrite /client/sel/tags \"%d\"" i)))
+
+;;****** key-items/Mod-Left
+;;
+;; NAME
+;;   Mod-Left
+;;
+;; DESCRIPTION
+;;   Selects the client on the left.
+;;  
+;;
+;;******
+
+(define (mod-left i)
+  (list '! "wmiir xwrite /tag/sel/ctl select left"))
+;;****** key-items/Mod-Right
+;;
+;; NAME
+;;   Mod-Right
+;;
+;; DESCRIPTION
+;;   Selects the client on the right.
+;;  
+;;
+;;******
+
+(define (mod-right i)
+  (! "wmiir xwrite /tag/sel/ctl select right"))
+
+;;****** key-items/Mod-Up
+;;
+;; NAME
+;;   Mod-Up
+;;
+;; DESCRIPTION
+;;   Selects the client on the top.
+;;  
+;;
+;;******
+
+(define (mod-up i)
+  (! "wmiir xwrite /tag/sel/ctl select up"))
+
+;;****** key-items/Mod-Down
+;;
+;; NAME
+;;   Mod-Down
+;;
+;; DESCRIPTION
+;;   Selects the client on the bottom.
+;;  
+;;
+;;******
+
+(define (mod-down i)
+  (! "wmiir xwrite /tag/sel/ctl select down"))
+;;****** key-items/Mod-Space
+;;
+;; NAME
+;;   Mod-Space
+;;
+;; DESCRIPTION
+;;   Toggles between floating and managed layers.
+;;  
+;;
+;;******
+
+
+(define (mod-space i)
+  (!"wmiir xwrite /tag/sel/ctl select toggle"))
+;;****** key-items/Mod-Control-Up
+;;
+;; NAME
+;;   Mod-Control-Up
+;;
+;; DESCRIPTION
+;;   Select the stack above.
+;;  
+;;
+;;******
+
+(define (mod-control-up)
+  (! "wmiir xwrite /tag/sel/ctl select up stack"))
+
+;;****** key-items/Mod-Control-Down
+;;
+;; NAME
+;;   Mod-Control-Down
+;;
+;; DESCRIPTION
+;;   Select the stack below.
+;;  
+;;
+;;******
+
+(define (mod-control-down)
+  (! "wmiir xwrite /tag/sel/ctl select down stack"))
+
+;;****** key-items/Mod-Shift-Left
+;;
+;; NAME
+;;   Mod-Shift-Left
+;;
+;; DESCRIPTION
+;;   Moves the selected client to the left.
+;;
+;;
+;;******
+
+(define (mod-shift-left )
+  (! "wmiir xwrite /tag/sel/ctl send sel left"))
+;;****** key-items/Mod-Shift-Right
+;;
+;; NAME
+;;   Mod-Shift-Right
+;;
+;; DESCRIPTION
+;;   Moves the selected client to the right.
+;;
+;;
+;;******
+
+(define (mod-shift-right)
+  (! "wmiir xwrite /tag/sel/ctl send sel right"))
+;;****** key-items/Mod-Shift-Up
+;;
+;; NAME
+;;   Mod-Shift-Up
+;;
+;; DESCRIPTION
+;;   Moves the selected client to the top.
+;;
+;;
+;;******
+
+(define (mod-shift-up)
+  (! "wmiir xwrite /tag/sel/ctl send sel up"))
+;;****** key-items/Mod-Shift-Down
+;;
+;; NAME
+;;   Mod-Shift-Down
+;;
+;; DESCRIPTION
+;;   Moves the selected client to the bottom.
+;;
+;;
+;;******
+(define (mod-shift-down)
+  (! "wmiir xwrite /tag/sel/ctl send sel down"))
+;;****** key-items/Mod-Shift-Space
+;;
+;; NAME
+;;   Mod-Shift-Space
+;;
+;; DESCRIPTION
+;;   Toggle client between floating and managed layers.
+;;
+;;
+;;******
+
+(define (mod-shift-space)
+  (! "wmiir xwrite /tag/sel/ctl send sel toggle"))
+;;****** key-items/Mod-f
+;;
+;; NAME
+;;   Mod-f
+;;
+;; DESCRIPTION
+;;   Toggle selected client into full screen state.
+;;
+;;
+;;******
+
+(define (mod-f)
+  (! "wmiir xwrite /client/sel/ctl Fullscreen toggle"))
+
+;;****** key-items/Mod-Shift-c
+;;
+;; NAME
+;;   Mod-Shift-c
+;;
+;; DESCRIPTION
+;;   Kills selected client.
+;;
+;;
+;;******
+
+(define (mod-shift-c)
+  (! "wmiir xwrite /client/sel/ctl kill"))
+
+;;****** key-items/Mod-d
+;;
+;; NAME
+;;   Mod-d
+;;
+;; DESCRIPTION
+;;   Set column to default mode. Default mode
+;;   is stacked mode in which all clients
+;;   are of the same size.
+;;
+;;
+;;******
+
+(define (mod-d)
+  (! "wmiir xwrite /tag/sel/ctl colmode sel default-max"))
+
+
+;;****** key-items/Mod-s
+;;
+;; NAME
+;;   Mod-s
+;;
+;; DESCRIPTION
+;;   Set column to stack mode. Stack mode
+;;   overlaps clients one on top of the other. 
+;;   Window decorations are visible on all clients
+;;   within a workspace.
+;;
+;;
+;;******
+
+(define (mod-s)
+  (! "wmiir xwrite /tag/sel/ctl colmode sel stack-max"))
+
+(define (load-keys k)
+  (let (resultado)
+
+;;****** key-items/Tags-0-to-9
+;;
+;; NAME
+;;   Tags-0-to-9
+;;
+;; DESCRIPTION
+;;   Loop that creates key for workspace operations.
+;;  
+;; NOTES
+;;   Creates bindings to move clients among workspaces and 
+;;   create new ones with a number from 0 to 9.
+;;   
+;;
+;;******
 
 
     (dotimes (i 10)
 	     (setq resultado 
 		   (append resultado 
-			    (list (list 
-				  (eval (list 'format "%s-%d" MODKEY i))
-
-				  (list '! (format "wmiir xwrite /ctl view \"%d\"" i))))
-				 (list (list 
-				  (eval (list 'format "%s-Shift-%d" MODKEY i))
-				  (list '! (format "wmiir xwrite /client/sel/tags \"%d\"" i)))))))
+                   (list (format "%s-%d" MODKEY i)  'select-tag)
+                   (list (format "%s-Shift-%d" MODKEY i) 'select-shift-tag))))
 
 
     (setq key_bindings 
 	  (list 
-
-;****** key-items/Mod-Left
-;
-; NAME
-;   Mod-Left
-;
-; DESCRIPTION
-;   Selects the client on the left.
-;  
-;
-;******
-
-	   '((format  "%s-%s" MODKEY LEFT)
-	     (list '! "wmiir xwrite /tag/sel/ctl select left"))
-
-;****** key-items/Mod-Right
-;
-; NAME
-;   Mod-Right
-;
-; DESCRIPTION
-;   Selects the client on the right.
-;  
-;
-;******
-
-	   '((format  "%s-%s" MODKEY RIGHT)
-	     (list '! "wmiir xwrite /tag/sel/ctl select right"))
-
-;****** key-items/Mod-Up
-;
-; NAME
-;   Mod-Up
-;
-; DESCRIPTION
-;   Selects the client on the top.
-;  
-;
-;******
-
-	   '((format  "%s-%s" MODKEY UP)
-	     (list '! "wmiir xwrite /tag/sel/ctl select up"))
-
-;****** key-items/Mod-Down
-;
-; NAME
-;   Mod-Down
-;
-; DESCRIPTION
-;   Selects the client on the bottom.
-;  
-;
-;******
-
-	   '((format  "%s-%s" MODKEY DOWN)
-	     (list '! "wmiir xwrite /tag/sel/ctl select down"))
-
-;****** key-items/Mod-Space
-;
-; NAME
-;   Mod-Space
-;
-; DESCRIPTION
-;   Toggles between floating and managed layers.
-;  
-;
-;******
-	   
-	   '((format "%s-space" MODKEY)   ; Toggle between floating and managed layers
-	     (list '!"wmiir xwrite /tag/sel/ctl select toggle"))
-
-;****** key-items/Mod-Control-Up
-;
-; NAME
-;   Mod-Control-Up
-;
-; DESCRIPTION
-;   Select the stack above.
-;  
-;
-;******
+	   ((format  "%s-%s" MODKEY LEFT) 'mod-left)
+	   ((format  "%s-%s" MODKEY RIGHT) 'mod-right)
+	   ((format  "%s-%s" MODKEY UP) 'mod-up)
+	   ((format  "%s-%s" MODKEY DOWN) 'mod-down)
+	   ((format "%s-space" MODKEY) 'mod-space) ;; Toggle between floating and managed layers
+	   ((format "%s-Control-%s" MODKEY UP) 'mod-control-up)  # Select the stack above
+	   ((format "%s-Control-%s" MODKEY DOWN)  # Select the stack below
+	     'mod-control-down)
 
 
-	   '((format "%s-Control-%s" MODKEY UP)    # Select the stack above
-	     (list '! "wmiir xwrite /tag/sel/ctl select up stack"))
 
-;****** key-items/Mod-Control-Down
-;
-; NAME
-;   Mod-Control-Down
-;
-; DESCRIPTION
-;   Select the stack below.
-;  
-;
-;******
+	   ((format "%s-Shift-%s"  MODKEY LEFT)   # Move selected client to the left
+	     mod-shift-left)
 
-	   '((format "%s-Control-%s" MODKEY DOWN)  # Select the stack below
-	     '(list '! "wmiir xwrite /tag/sel/ctl select down stack"))
-
-;****** key-items/Mod-Shift-Left
-;
-; NAME
-;   Mod-Shift-Left
-;
-; DESCRIPTION
-;   Moves the selected client to the left.
-;
-;
-;******
-
-
-	   '((format "%s-Shift-%s"  MODKEY LEFT)   # Move selected client to the left
-	     (list '! "wmiir xwrite /tag/sel/ctl send sel left"))
-
-;****** key-items/Mod-Shift-Right
-;
-; NAME
-;   Mod-Shift-Right
-;
-; DESCRIPTION
-;   Moves the selected client to the right.
-;
-;
-;******
 
 	   '((format "%s-Shift-%s" MODKEY RIGHT)  # Move selected client to the right
-	     (list '! "wmiir xwrite /tag/sel/ctl send sel right"))
-
-;****** key-items/Mod-Shift-Up
-;
-; NAME
-;   Mod-Shift-Up
-;
-; DESCRIPTION
-;   Moves the selected client to the top.
-;
-;
-;******
-
-	   '((format "%s-Shift-%s" MODKEY UP)     # Move selected client up
-	     (list '! "wmiir xwrite /tag/sel/ctl send sel up"))
-
-;****** key-items/Mod-Shift-Down
-;
-; NAME
-;   Mod-Shift-Down
-;
-; DESCRIPTION
-;   Moves the selected client to the bottom.
-;
-;
-;******
+	     mod-shift-right)
 
 
-	   '((format "%s-Shift-%s" MODKEY DOWN)   # Move selected client down
-	     (list '! "wmiir xwrite /tag/sel/ctl send sel down"))
+	   ((format "%s-Shift-%s" MODKEY UP)     # Move selected client up
+	     mod-shift-up)
+
+
+
+	   ((format "%s-Shift-%s" MODKEY DOWN)   # Move selected client down
+	     mod-shift-down)
 	   
-;****** key-items/Mod-Shift-Space
-;
-; NAME
-;   Mod-Shift-Space
-;
-; DESCRIPTION
-;   Toggle client between floating and managed layers.
-;
-;
-;******
 
-	   '((format "%s-Shift-%s" MODKEY "space")   # Toggle selected client between floating and managed layers
-	     (list '! "wmiir xwrite /tag/sel/ctl send sel toggle"))
+	   ((format "%s-Shift-%s" MODKEY "space")   # Toggle selected client between floating and managed layers
+	     mod-shift-space)
 
-;****** key-items/Mod-f
-;
-; NAME
-;   Mod-f
-;
-; DESCRIPTION
-;   Toggle selected client into full screen state.
-;
-;
-;******
 
 
 	   '((format "%s-f" MODKEY) # Toggle selected client's fullsceen state
-	     (list ' ! "wmiir xwrite /client/sel/ctl Fullscreen toggle"))
-
-;****** key-items/Mod-Shift-c
-;
-; NAME
-;   Mod-Shift-c
-;
-; DESCRIPTION
-;   Kills selected client.
-;
-;
-;******
+	     mod-f)
 
 
 	   '((format "%s-Shift-c" MODKEY)
-	     (list '! "wmiir xwrite /client/sel/ctl kill"))
+	     mod-shift-c)
 
-;****** key-items/Mod-d
-;
-; NAME
-;   Mod-d
-;
-; DESCRIPTION
-;   Set column to default mode. Default mode
-;   is stacked mode in which all clients
-;   are of the same size.
-;
-;
-;******
 
 	   '((format "%s-d" MODKEY) # Set column to default mode
-	     (list '! "wmiir xwrite /tag/sel/ctl colmode sel default-max"))
-
-;****** key-items/Mod-s
-;
-; NAME
-;   Mod-s
-;
-; DESCRIPTION
-;   Set column to stack mode. Stack mode
-;   overlaps clients one on top of the other. 
-;   Window decorations are visible on all clients
-;   within a workspace.
-;
-;
-;******
+	     mod-d)
 
 	   '((format "%s-s" MODKEY) # Set column to stack mode
-	     (list '! "wmiir xwrite /tag/sel/ctl colmode sel stack-max"))
+	     mod-s )
 
-;****** key-items/Mod-m
-;
-; NAME
-;   Mod-m
-;
-; DESCRIPTION
-;   Set column to maximum mode. Maximum mode
-;   places the client to occupy all available
-;   space. Clients are overlay one on top of the
-;   other. The number of clients is listed in the
-;   upper right hand corner of the client's title
-;   frame.
-;
-;
-;******
+;;****** key-items/Mod-m
+;;
+;; NAME
+;;   Mod-m
+;;
+;; DESCRIPTION
+;;   Set column to maximum mode. Maximum mode
+;;   places the client to occupy all available
+;;   space. Clients are overlay one on top of the
+;;   other. The number of clients is listed in the
+;;   upper right hand corner of the client's title
+;;   frame.
+;;
+;;
+;;******
 
 	   '((format "%s-m" MODKEY) # Set column to max mode
 	     (list ' ! "wmiir xwrite /tag/sel/ctl colmode sel stack+max"))
 
-;****** key-items/Mod-Shift-q
-;
-; NAME
-;   Mod-Shift-q
-;
-; DESCRIPTION
-;   Dismantles the window manager and quits.
-;   Ths is a divergence from the original 
-;   script. It is just for convenience.
-;
-;
-;******
+;;****** key-items/Mod-Shift-q
+;;
+;; NAME
+;;   Mod-Shift-q
+;;
+;; DESCRIPTION
+;;   Dismantles the window manager and quits.
+;;   Ths is a divergence from the original 
+;;   script. It is just for convenience.
+;;
+;;
+;;******
 
 
 	   '((format "%s-Shift-q" MODKEY)
@@ -341,36 +377,36 @@
 		   '(destroy statuspid)
 		   '(exit 0)))
     
-;****** key-items/Mod-Return
-;
-; NAME
-;   Mod-Return
-;
-; DESCRIPTION
-;   Launch a terminal as defined in WMII_TERM.
-;
-;******
+;;****** key-items/Mod-Return
+;;
+;; NAME
+;;   Mod-Return
+;;
+;; DESCRIPTION
+;;   Launch a terminal as defined in WMII_TERM.
+;;
+;;******
 
 	   '((format "%s-Return" MODKEY) # Launch a terminal
 	     (list '! (format "wmiir setsid %s &" WMII_TERM)))
     
 
-;****** key-items/Mod-a
-;
-; NAME
-;   Mod-a
-;
-; DESCRIPTION
-;   Opens the wmii action menu. It reads the choices from the
-;   Action list and executes dmenu. The actions are defined
-;   in action.nlsp. 
-;
-; NOTE
-;   Colors are hard coded, they need to be configurable.
-;   This is originally defined with wimenu, but 
-;   in this case, dmenu was used because of convenience. 
-;
-;******
+;;****** key-items/Mod-a
+;;
+;; NAME
+;;   Mod-a
+;;
+;; DESCRIPTION
+;;   Opens the wmii action menu. It reads the choices from the
+;;   Action list and executes dmenu. The actions are defined
+;;   in action.nlsp. 
+;;
+;; NOTE
+;;   Colors are hard coded, they need to be configurable.
+;;   This is originally defined with wimenu, but 
+;;   in this case, dmenu was used because of convenience. 
+;;
+;;******
 
 
 	   '((format "%s-a" MODKEY)      # Open wmii actions menu
@@ -385,22 +421,22 @@
 			  (fork (Action  (list menu_choice)))
 			  (if (= menu_choice "quit") (exit 0))))))
 
-;****** key-items/Mod-t
-;
-; NAME
-;   Mod-t
-;
-; DESCRIPTION
-;   Opens the wmii tag menu. It reads the defined workspaces
-;   and permits the user to write the one that the user wishes
-;   to swap to.
-;
-; NOTE
-;   Colors are hard coded, they need to be configurable.
-;   This is originally defined with wimenu, but 
-;   in this case, dmenu was used because of convenience. 
-;
-;******
+;;****** key-items/Mod-t
+;;
+;; NAME
+;;   Mod-t
+;;
+;; DESCRIPTION
+;;   Opens the wmii tag menu. It reads the defined workspaces
+;;   and permits the user to write the one that the user wishes
+;;   to swap to.
+;;
+;; NOTE
+;;   Colors are hard coded, they need to be configurable.
+;;   This is originally defined with wimenu, but 
+;;   in this case, dmenu was used because of convenience. 
+;;
+;;******
 
 
 	   '((format "%s-t" MODKEY)      
@@ -418,21 +454,21 @@
 			  (setq menu_choice (first menu_choice))
 			  (fork (! (format "wmiir xwrite /ctl view %s" menu_choice)))))))
 
-;****** key-items/Mod-Shift-t
-;
-; NAME
-;   Mod-Shift-t
-;
-; DESCRIPTION
-;   Opens the wmii tag menu. It reads the defined workspaces
-;   and permits the user to create one with a custom name.
-;
-; NOTE
-;   Colors are hard coded, they need to be configurable.
-;   This is originally defined with wimenu, but 
-;   in this case, dmenu was used because of convenience. 
-;
-;******
+;;****** key-items/Mod-Shift-t
+;;
+;; NAME
+;;   Mod-Shift-t
+;;
+;; DESCRIPTION
+;;   Opens the wmii tag menu. It reads the defined workspaces
+;;   and permits the user to create one with a custom name.
+;;
+;; NOTE
+;;   Colors are hard coded, they need to be configurable.
+;;   This is originally defined with wimenu, but 
+;;   in this case, dmenu was used because of convenience. 
+;;
+;;******
 
 
 	   '((format "%s-Shift-t" MODKEY)    
@@ -451,43 +487,43 @@
 			  (setq menu_choice (first menu_choice))
 			  (fork (! (format "wmiir xwrite /client/%s/tags %s" c menu_choice)))))))
 
-;****** key-items/Mod-e
-;
-; NAME
-;   Mod-e
-;
-; DESCRIPTION
-;   Opens the program menu, gets input from the user and
-;   executes the selected program.
-;
-; NOTE
-;   Colors are hard coded, they need to be configurable.
-;   This is originally defined with wimenu, but 
-;   in this case, dmenu was used because of convenience. 
-;
-;******
+;;****** key-items/Mod-e
+;;
+;; NAME
+;;   Mod-e
+;;
+;; DESCRIPTION
+;;   Opens the program menu, gets input from the user and
+;;   executes the selected program.
+;;
+;; NOTE
+;;   Colors are hard coded, they need to be configurable.
+;;   This is originally defined with wimenu, but 
+;;   in this case, dmenu was used because of convenience. 
+;;
+;;******
 
 	   '((format "%s-e" MODKEY)      # Open program menu
 	     (list '! "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
 
-;****** key-items/Mod-Control-t
-;
-; NAME
-;   Mod-Control-t
-;
-; DESCRIPTION
-;   Toggles all other key bindings. 
-;
-;******
+;;****** key-items/Mod-Control-t
+;;
+;; NAME
+;;   Mod-Control-t
+;;
+;; DESCRIPTION
+;;   Toggles all other key bindings. 
+;;
+;;******
 
 	   '((format "%s-Control-t" MODKEY) 
-					; Toggle all other key bindings
+					;; Toggle all other key bindings
 	     (list 'begin 
 		   '(setq k (first (eval "wmiir read /keys | wc -l | tr -d ' \t\n'")))
 		   '(cond
 		     ((or (= k 0) (= k 1))
 		      (begin 
-					; what are Keys?
+					;; what are Keys?
 			(! (format "echo -n \"%s\" | wmiir write /keys" Keys))
 			(! (format "wmiir xwrite /ctl grabmod %s" MODKEY))))
 		     (true (begin
@@ -501,34 +537,34 @@
     resultado))
     
 
-;****v* keys.nlsp/Keys
-;
-; NAME
-;   Contains list of key bindings.
-;   
-; SOURCE
+;;****v* keys.nlsp/Keys
+;;
+;; NAME
+;;   Contains list of key bindings.
+;;   
+;; SOURCE
 
 
 (setq Keys (convert-to-newline-string (key-list (key-items k))))
 
-;******
+;;******
 
-;****f* keys.nlsp/Key
-;
-; NAME 
-;   Key
-;
-;  DESCRIPTION
-;     Evaluates the macro and executes the selected key stroke.
-;
-;  INPUTS
-;     k - key stroke - A list containing the key stroke and
-;     arguments. 
-; 
-;  OUTPUT
-;     Key stroke command is executed.
-; 
-;******
+;;****f* keys.nlsp/Key
+;;
+;; NAME 
+;;   Key
+;;
+;;  DESCRIPTION
+;;     Evaluates the macro and executes the selected key stroke.
+;;
+;;  INPUTS
+;;     k - key stroke - A list containing the key stroke and
+;;     arguments. 
+;; 
+;;  OUTPUT
+;;     Key stroke command is executed.
+;; 
+;;******
 
 
 (define (Key k)
