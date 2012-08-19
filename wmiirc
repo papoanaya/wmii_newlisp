@@ -63,7 +63,8 @@
 
 (setq WMII_FONT "-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*")
 
-(setq WMII_TERM "xterm")
+;;(setq WMII_TERM "xterm")
+(setq WMII_TERM "rxvt -bg black -fg grey90")
 
 ;;******
 

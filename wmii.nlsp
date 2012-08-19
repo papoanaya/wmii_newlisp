@@ -345,7 +345,11 @@
 
 
 (define (wi_selclient)
-  (first (exec "wmiir read /client/sel/ctl | sed 1q | tr -d '\012'")))
+  (let ((client-list 
+         (exec "wmiir read /client/sel/ctl | sed 1q | tr -d '\012'")))
+    (if client-list
+        (first client-list)
+        nil)))
 
 
 

@@ -405,10 +405,13 @@
           (exec (format
                  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" tags )))
 
-    (if (not (= menu_choice '()))
-        (begin
-          (setq menu_choice (first menu_choice))
-          (fork (! (format "wmiir xwrite /client/%s/tags %s" c menu_choice)))))))
+    (println menu_choice)
+    (println c)
+    (println tags)
+    (if  (and menu_choice c)
+         (begin
+           (setq menu_choice (first menu_choice))
+           (fork (! (format "wmiir xwrite /client/%s/tags %s" c menu_choice)))))))
 
 
 ;;****** key-items/Mod-e
