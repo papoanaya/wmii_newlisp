@@ -405,9 +405,6 @@
           (exec (format
                  "echo \"%s\" | dmenu -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee" tags )))
 
-    (println menu_choice)
-    (println c)
-    (println tags)
     (if  (and menu_choice c)
          (begin
            (setq menu_choice (first menu_choice))
