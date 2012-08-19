@@ -1,152 +1,147 @@
-;****** wmii_newlisp/actions.nlsp
-;
-; NAME 
-;   actions.nlsp 
-; 
-; SYNOPSIS 
-;    A replacement wmii handler in newlisp. 
-;    This file contains all the code related to window manager "actions" 
-;    handlers. These are window manager events that user visible
-;    
-;
-; AUTHOR 
-;    Luis R. Anaya
-; 
-; COPYRIGHT 
-;    (c) 2012 by Luis R. Anaya
-;
-;******
+;;****** wmii_newlisp/actions.nlsp
+;;
+;; NAME 
+;;   actions.nlsp 
+;; 
+;; SYNOPSIS 
+;;    A replacement wmii handler in newlisp. 
+;;    This file contains all the code related to window manager "actions" 
+;;    handlers. These are window manager events that user visible
+;;    
+;;
+;; AUTHOR 
+;;    Luis R. Anaya
+;; 
+;; COPYRIGHT 
+;;    (c) 2012 by Luis R. Anaya
+;;
+;;******
 
-;****f* actions.nlsp/action-items
-;
-; NAME 
-;   action-items 
-;
-;  DESCRIPTION
-;     Contains all the actions and its bound command name. The bound command 
-;     is extracted and piped through dmenu/wimenu 
-;
-;  INPUTS
-;     a - action - Used for variable substitution for macro creation
-; 
-;  OUTPUT
-;     Case statement mapping an action name to a piece of logic.
-; 
-;******
-
-
-
-(define-macro (action-items a)
-  (let ((resultado (list 'case (list 'first a))))
-    (setq resultado 
-	  (append resultado (list 
-
-;****** action-items/quit
-;
-; NAME
-;   quit
-;
-; DESCRIPTION
-;   Quits from the window manager
-;
-;******
-		  '("quit"
-		    (begin 
-		      (! "wmiir xwrite /ctl quit")
-		      (destroy pid)
-		      (destroy statuspid)
-		      (exit 0))
-		    )
-
-;****** action-items/exec
-; 
-; NAME
-;   exec
-; 
-; DESCRIPTION
-;   Executes dmenu, used to obtain the name of an executable and spawn it to
-;   background. 
-;
-;******
-
-		  '("exec"
-		    (begin 
-		      (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee "))
-		    )
-;****** action-items/exec-term
-; 
-; NAME
-;   exec-term
-; 
-; DESCRIPTION
-;   Executes dmenu, used to obtain the name of an executable runs it in a 
-;   terminal.
-;
-;******
+;;****v* actions.nlsp/action-items
+;;
+;; NAME 
+;;   action-list
+;;
+;;  DESCRIPTION
+;;     Contains all the actions and its bound command name. The bound command 
+;;     is extracted and piped through dmenu/wimenu 
+;;
+;;  INPUTS
+;;     a - action - Used for variable substitution for macro creation
+;; 
+;;  OUTPUT
+;;     Association list
+;; 
+;;******
+(setq action-list 
+      '(("quit" quit-action)
+        ("exec" exec-action)
+        ("exec-term" exec-term-action)
+        ("status" status-action)))
 
 
-		  '("exec-term"
-		    (begin
-		      (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
+;;****** action-items/quit
+;;
+;; NAME
+;;   quit
+;;
+;; DESCRIPTION
+;;   Quits from the window manager
+;;
+;;******
+
+(define (quit-action)
+  (begin 
+    (! "wmiir xwrite /ctl quit")
+    (destroy pid)
+    (destroy statuspid)
+    (exit 0)))
+
+;;****** action-items/exec
+;; 
+;; NAME
+;;   exec
+;; 
+;; DESCRIPTION
+;;   Executes dmenu, used to obtain the name of an executable and spawn it to
+;;   background. 
+;;
+;;******
+
+(define (exec-action)
+  (begin 
+    (exec "dmenu_run -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
+
+;;****** action-items/exec-term
+;; 
+;; NAME
+;;   exec-term
+;; 
+;; DESCRIPTION
+;;   Executes dmenu, used to obtain the name of an executable runs it in a 
+;;   terminal.
+;;
+;;******
+
+
+(define (exec-term-action)
+
+  (begin
+    (setq menu_choice (first (exec "dmenu_path | dmenu  -nb \\#222222 -nf \\#bbbbbb  -sb \\#005577 -sf \\#eeeeee ")))
 		      
-		      (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice )) ))
+    (! (format "wmiir setsid %s -e %s &" WMII_TERM menu_choice ))))
 
-;****** action-items/status
-;
-; NAME
-;   status
-;
-; DESCRIPTION
-;   Forked on start, it is used to write the status in the lower right hand
-;   corder of the window manager. The default definition
-;   is in newlisp/wmiirc
-;   
-;
-;******
+;;****** action-items/status
+;;
+;; NAME
+;;   status
+;;
+;; DESCRIPTION
+;;   Forked on start, it is used to write the status in the lower right hand
+;;   corder of the window manager. The default definition
+;;   is in newlisp/wmiirc
+;;   
+;;
+;;******
 
+(define (status-action)
+  (begin 
+    (! "wmiir remove /rbar/status 2>/dev/null")
+    (! (format "echo \"%s\" | wmiir create /rbar/status" 
+               WMII_NORMCOLORS))
+    (setq rc 0)		 
+    (while (= rc 0)
+           (setq rc 
+                 (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
+           (sleep 1000))))
 
-		  '("status"
-		    (begin 
-		      (! "wmiir remove /rbar/status 2>/dev/null")
-		      (! (format "echo \"%s\" | wmiir create /rbar/status" 
-				 WMII_NORMCOLORS))
-		      (setq rc 0)		 
-		      (while (= rc 0)
-			     (setq rc (! (format "echo \"%s\" | wmiir write /rbar/status" (status))))
-			     (sleep 1000) ) 
-		      ))
-		  )))
-    resultado)
-)
+;;****v* actions.nlsp/Actions
+;;
+;; NAME
+;;   Contains list of available actions
+;;   
+;; SOURCE
 
-;****v* actions.nlsp/Actions
-;
-; NAME
-;   Contains list of available actions
-;   
-; SOURCE
+(setq Actions (map 'first  action-list))
 
-(setq Actions (key-list (action-items a)))
+;;******
 
-;******
-
-;****f* actions.nlsp/Action
-;
-; NAME 
-;   Action
-;
-;  DESCRIPTION
-;     Evaluates the macro and executes the selected action.
-;
-;  INPUTS
-;     a - action - A list containing the action to perform.
-; 
-;  OUTPUT
-;     Action is executed.
-; 
-;******
-
+;;****f* actions.nlsp/Action
+;;
+;; NAME 
+;;   Action
+;;
+;;  DESCRIPTION
+;;     Evaluates the macro and executes the selected action.
+;;
+;;  INPUTS
+;;     a - action - A list containing the action to perform.
+;; 
+;;  OUTPUT
+;;     Action is executed.
+;; 
+;;******
 
 (define (Action a)
-  (eval (action-items a))
-)
+  (setq function (nth 1 (assoc a action-list)))
+  (eval (list function)))

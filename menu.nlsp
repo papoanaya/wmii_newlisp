@@ -1,270 +1,252 @@
-;****** wmii_newlisp/menu.nlsp
-;
-; NAME 
-;   menu.nlsp
-; 
-; SYNOPSIS 
-;    A replacement wmii handler in newlisp. 
-;    This file contains all the code related to window manager "menu"
-;    handlers. This file defines menu operations that are run through
-;    wmii9menu.
-;    
-;
-; AUTHOR 
-;    Luis R. Anaya
-; 
-; COPYRIGHT 
-;    (c) 2012 by Luis R. Anaya
-; 
-;******
+;;****** wmii_newlisp/menu.nlsp
+;;
+;; NAME 
+;;   menu.nlsp
+;; 
+;; SYNOPSIS 
+;;    A replacement wmii handler in newlisp. 
+;;    This file contains all the code related to window manager "menu"
+;;    handlers. This file defines menu operations that are run through
+;;    wmii9menu.
+;;    
+;;
+;; AUTHOR 
+;;    Luis R. Anaya
+;; 
+;; COPYRIGHT 
+;;    (c) 2012 by Luis R. Anaya
+;; 
+;;******
 
-;****f* menu.nlsp/menu-operations
-;
-;  NAME 
-;   menu-operations
-;
-;  DESCRIPTION
-;     Contains all the actual operations that get executed when a
-;     menu item is selected form wmii9menu.
-;
-;  INPUTS
-;     m - menu selection - Contains a list with the menu selection and arguments
-;  
-; 
-;  OUTPUT
-;     Selected operations is executed. 
-; 
-;******
+;;****f* menu.nlsp/menu-operations
+;;
+;;  NAME 
+;;   menu-operations
+;;
+;;  DESCRIPTION
+;;     Contains all the actual operations that get executed when a
+;;     menu item is selected form wmii9menu.
+;;
+;;  INPUTS
+;;     m - menu selection - Contains a list with the menu selection and arguments
+;;  
+;; 
+;;  OUTPUT
+;;     Selected operations is executed. 
+;; 
+;;******
 
+(setq menu-operations
+      '(("Client-3-Delete" client-3-delete)
+        ("Client-3-Kill" client-3-kill)
+        ("Client-3-Fullscreen" client-3-fullscreen)
+        ("LBar-1-Click" lbar-1-click)
+        ("LBar-3-Delete" lbar-3-delete)))
 
+;;****** menu-operations/Client-3-Delete
+;;
+;; NAME
+;;   Client-3-Delete
+;;
+;; DESCRIPTION
+;;   Closes the selected window. Not forced. 
+;;
+;;******
 
-(define (menu-operations m)
-  (case (first m)
-
-;****** menu-operations/Client-3-Delete
-;
-; NAME
-;   Client-3-Delete
-;
-; DESCRIPTION
-;   Closes the selected window. Not forced. 
-;
-;******
-
-    ("Client-3-Delete"
-     (! (format "wmiir xwrite /client/%s/ctl kill" (last m) )))
-
-
-;****** menu-operations/Client-3-Kill
-;
-; NAME
-;   Client-3-Kill
-;
-; DESCRIPTION
-;   Kills the selected window. Forced
-;
-;******
-
-
-    ("Client-3-Kill"
-     (! (format "wmiir xwrite /client/$s/ctl slay" (last m))))
-
-;****** menu-operations/Client-3-Fullscreen
-;
-; NAME
-;   Client-3-Fullscreen
-;
-; DESCRIPTION
-;   Places the selected window in undecorated fullscreen mode. 
-;
-;******
-
-    ("Client-3-Fullscreen"
-     (! (format "wmiir xwrite /client/%s/ctl fullscreen on" (last m))))
-
-;****** menu-operations/LBar-1-Click
-;
-; NAME
-;   LBar-1-Click
-;
-; DESCRIPTION
-;   Selects the workspace by clicking on it in the lower left had corner of the
-;   screen.
-;
-;******
-  
-    ("LBar-1-Click"
-     (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)) )) )
-
-;****** menu-operations/LBar-3-Delete
-;
-; NAME
-;   LBar-3-Delete
-;
-; DESCRIPTION
-;   Closes all the clients and deletes the workspace by *right* clicking on it in the 
-;   lower left had corner of the screen.
-;
-;******
+(define (client-3-delete m)
+  (! (format "wmiir xwrite /client/%s/ctl kill" m)))
+;;****** menu-operations/Client-3-Kill
+;;
+;; NAME
+;;   Client-3-Kill
+;;
+;; DESCRIPTION
+;;   Kills the selected window. Forced
+;;
+;;******
 
 
-    ("LBar-3-Delete"
-     (begin
-       (setq tag (nth 1 m))
+(define (client-3-kill m)
+  (! (format "wmiir xwrite /client/$s/ctl slay" m)))
 
-       (setq clients 
-	     (exec 
-	      (format "wmiir read /tag/%s/index | awk '!/^#/{print $2}'"
-		      tag )))
+;;****** menu-operations/Client-3-Fullscreen
+;;
+;; NAME
+;;   Client-3-Fullscreen
+;;
+;; DESCRIPTION
+;;   Places the selected window in undecorated fullscreen mode. 
+;;
+;;******
 
-       (dolist (c clients)
-	       (if (= tag 
-		      (first (exec 
-			      (format "wmiir read /client/%s/tags" c))
-			     ))
-		   (! (format "wmiir xwrite /client/%s/ctl kill" c))
-		   (! (format "wmiir xwrite /client/%s/tags -%s" 
-			      c tag))
-		   )
-	       (if (= 
-		    tag (wi_seltag))
-		   (begin
-		     (setq newtag 
-			   (wi_tags)); needs to be completed
-		     (setq "wmiir xwrite /ctl view %s" newtag)))
-	       )) )
-    ) )
- 
+(define (client-3-fullscreen)
+  (! (format "wmiir xwrite /client/%s/ctl fullscreen on" m)))
 
-;****f* menu.nlsp/menu-items
-;
-;  NAME 
-;   menu-items
-;
-;  DESCRIPTION
-;     Contains all the actions and its bound mouse action.
-;
-;  INPUTS
-;     m - menu selection - Contains the variable used to create the case 
-;    statement. 
-;  
-; 
-;  OUTPUT
-;     Case statement mapping the mouse event to an operations is created.
-; 
-;******
+;;****** menu-operations/LBar-1-Click
+;;
+;; NAME
+;;   LBar-1-Click
+;;
+;; DESCRIPTION
+;;   Selects the workspace by clicking on it in the lower left had corner of the
+;;   screen.
+;;
+;;******
 
-(define-macro (menu-items m)
-# Menus
-  (let ((resultado (list 'case (list 'first m))))
-    (setq resultado 
-	  (append resultado 
-		  (list 
+(define (lbar-1-click m)
+  (! (format "wmiir xwrite /ctl view \"%d\"" (int (last m)))))
+;;****** menu-operations/LBar-3-Delete
+;;
+;; NAME
+;;   LBar-3-Delete
+;;
+;; DESCRIPTION
+;;   Closes all the clients and deletes the workspace by *right* clicking on it in the 
+;;   lower left had corner of the screen.
+;;
+;;******
+(define (lbar-3-delete m)
 
-;****** menu-items/ClientMouseDown
-;
-; NAME
-;   ClientMouseDown
-;
-; DESCRIPTION
-;   It handles operations done when the mouse is clicked and held; Used for window
-;   operations. 
-; 
-; NOTES
-;   It can be improved by not having the options hard coded which should 
-;   provide flexibility on use. As of now, wi_fmenu presents a menu
-;   on right click only. 
-;
-;******
+  (begin
+    (setq tag m)
+    
+    (setq clients 
+          (exec 
+           (format "wmiir read /tag/%s/index | awk '!/^#/{print $2}'"
+                   tag)))
 
-		   '("ClientMouseDown"
-		     
-		     (begin 
-		       (setq options '("Delete" "Kill" "Fullscreen"))
-		       (fork (wi_fnmenu "Client" 
-					    (nth 1 m) (nth 2 m) options)) ))
+    (dolist (c clients)
+            (if (= tag 
+                   (first (exec 
+                           (format "wmiir read /client/%s/tags" c))))
+                (! (format "wmiir xwrite /client/%s/ctl kill" c))
+                (! (format "wmiir xwrite /client/%s/tags -%s" 
+                           c tag))))
+    (if (= tag (wi_seltag))
+        (let ((newtag (first (wi_tags))))
+          (! (format "wmiir xwrite /ctl view %s" newtag))))))
 
-;****** menu-items/LeftBarMouseDown
-;
-; NAME
-;   LeftBarMouseDown
-;
-; DESCRIPTION
-;   It handles operations done when the mouse is clicked and held on the 
-;   lower left hand corner.
-; 
-;   Used for workspace operations.
-;  
-; NOTES
-;   It can be improved by not having the options hard coded which should 
-;   provide flexibility on use. As of now, wi_fmenu presents a menu
-;   on right click only. 
-;
-;******
+;;****** menu-items/ClientMouseDown
+;;
+;; NAME
+;;   ClientMouseDown
+;;
+;; DESCRIPTION
+;;   It handles operations done when the mouse is clicked and held;; Used for window
+;;   operations. 
+;; 
+;; NOTES
+;;   It can be improved by not having the options hard coded which should 
+;;   provide flexibility on use. As of now, wi_fmenu presents a menu
+;;   on right click only. 
+;;
+;;******
 
+(define (client-mouse-down m) 
+  (begin 
+    (setq options '("Delete" "Kill" "Fullscreen"))
+    (fork (wi_fnmenu "Client" 
+                     (nth 1 m) (nth 2 m) options))))
 
-		   '("LeftBarMouseDown"
-		     (begin 
-		       (setq options '("Delete"))
-		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options)) ))
+;;****** menu-items/LeftBarMouseDown
+;;
+;; NAME
+;;   LeftBarMouseDown
+;;
+;; DESCRIPTION
+;;   It handles operations done when the mouse is clicked and held on the 
+;;   lower left hand corner.
+;; 
+;;   Used for workspace operations.
+;;  
+;; NOTES
+;;   It can be improved by not having the options hard coded which should 
+;;   provide flexibility on use. As of now, wi_fmenu presents a menu
+;;   on right click only. 
+;;
+;;******
 
-;****** menu-items/LeftBarClick
-;
-; NAME
-;   LeftBarMouseClick
-;
-; DESCRIPTION
-;   It handles operations done when the mouse is clicked on the 
-;   lower left hand corner.
-; 
-;   Used for workspace selection (workspace switching). 
-;  
-; NOTES
-;   It can be improved by not having the options hard coded which should 
-;   provide flexibility on use. As of now, wi_fmenu presents a menu
-;   on right click only. 
-;
-;******
+(define (left-bar-mouse-down m)
+  (begin 
+    (setq options '("Delete"))
+    (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
-		   '("LeftBarClick"
-		     (begin 
-		       (setq options '() )
-		       (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options)) ))
+;;****** menu-items/LeftBarClick
+;;
+;; NAME
+;;   LeftBarMouseClick
+;;
+;; DESCRIPTION
+;;   It handles operations done when the mouse is clicked on the 
+;;   lower left hand corner.
+;; 
+;;   Used for workspace selection (workspace switching). 
+;;  
+;; NOTES
+;;   It can be improved by not having the options hard coded which should 
+;;   provide flexibility on use. As of now, wi_fmenu presents a menu
+;;   on right click only. 
+;;
+;;******
 
-		   '("" true)
-		   )
-		  )
-	  )
-    resultado))
-
-;****v* menu.nlsp/Menus
-;
-; NAME
-;   Contains list of available menu actions
-;   
-; SOURCE
+(define (left-bar-click m)
+  (begin 
+    (setq options '() )
+    (fork (wi_fnmenu "LBar" (nth 2 m) (nth 1 m) options))))
 
 
-(setq Menus (key-list (menu-items m)))
+;;****f* menu.nlsp/menu-items
+;;
+;;  NAME 
+;;   menu-items
+;;
+;;  DESCRIPTION
+;;     Contains all the actions and its bound mouse action.
+;;
+;;  INPUTS
+;;     m - menu selection - Contains the variable used to create the case 
+;;    statement. 
+;;  
+;; 
+;;  OUTPUT
+;;     Case statement mapping the mouse event to an operations is created.
+;; 
+;;******
 
-;******
+(setq menu-list
+      '(("ClientMouseDown" client-mouse-down)
+        ("LeftBarMouseDown" left-bar-mouse-down)
+        ("LeftBarClick" left-bar-click)
+        ("" true)))
 
-;****f* menu.nlsp/Menu
-;
-; NAME 
-;   Menu
-;
-;  DESCRIPTION
-;     Evaluates the macro and executes the selected menu action.
-;
-;  INPUTS
-;     m - menu action - A list containing the menu action to perform.
-; 
-;  OUTPUT
-;     Menu action is executed.
-; 
-;******
+;;****v* menu.nlsp/Menus
+;;
+;; NAME
+;;   Contains list of available menu actions
+;;   
+;; SOURCE
+
+
+(setq Menus (map 'first menu-list))
+
+;;******
+
+;;****f* menu.nlsp/Menu
+;;
+;; NAME 
+;;   Menu
+;;
+;;  DESCRIPTION
+;;     Evaluates the macro and executes the selected menu action.
+;;
+;;  INPUTS
+;;     m - menu action - A list containing the menu action to perform.
+;; 
+;;  OUTPUT
+;;     Menu action is executed.
+;; 
+;;******
 
 (define (Menu m)
-  (eval (menu-items m))
-)
+  (setq function (assoc (nth 0 m) menu-list))
+  (eval (list (nth 1 function) 'm)))

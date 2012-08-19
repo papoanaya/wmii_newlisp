@@ -1,32 +1,32 @@
-#!/opt/bin/env newlisp
-;****** wmii_newlisp/wmiirc
-;
-; NAME 
-;   wmiirc
-; 
-; SYNOPSIS 
-;    A replacement wmii handler in newlisp. 
-;    
-;    This file contains all the global configuration file.
-;    
-; AUTHOR 
-;    Luis R. Anaya
-; 
-; COPYRIGHT 
-;    (c) 2012 by Luis R. Anaya
-;
-; NOTES
-;    Ideally this should contain configuration, but some of these routines should be in
-;    wmii.nlsp to be not user facing.
-; 
-;******
+#!/opt/home/papo/bin/newlisp
+;;****** wmii_newlisp/wmiirc
+;;
+;; NAME 
+;;   wmiirc
+;; 
+;; SYNOPSIS 
+;;    A replacement wmii handler in newlisp. 
+;;    
+;;    This file contains all the global configuration file.
+;;    
+;; AUTHOR 
+;;    Luis R. Anaya
+;; 
+;; COPYRIGHT 
+;;    (c) 2012 by Luis R. Anaya
+;;
+;; NOTES
+;;    Ideally this should contain configuration, but some of these routines should be in
+;;    wmii.nlsp to be not user facing.
+;; 
+;;******
 
-;****** wmiirc/cofigurable_parameters
-;
-;  NOTES 
-;    User configurable parameters
-;
-;  SOURCE
+;;****** wmiirc/cofigurable_parameters
+;;
+;;  NOTES 
+;;    User configurable parameters
+;;
+;;  SOURCE
 
 (setq wmiiscript "wmiirc") 
 
@@ -37,7 +37,7 @@
 (setq LEFT "h")
 (setq RIGHT "l")
 
-;******
+;;******
 
 
 # Bars
@@ -45,16 +45,16 @@
 (setq noticebar "/rbar/!notice")
 
 # Colors tuples: "<text> <background> <border>"
-;export WMII_NORMCOLORS='#000000 #c1c48b #81654f'
-;export WMII_FOCUSCOLORS='#000000 #81654f #000000'
-;export WMII_BACKGROUND='#333333'
+;;export WMII_NORMCOLORS='#000000 #c1c48b #81654f'
+;;export WMII_FOCUSCOLORS='#000000 #81654f #000000'
+;;export WMII_BACKGROUND='#333333'
 
-;****** wmiirc/colors
-;
-;  NOTES 
-;    Color, fonts and terminal definitions are here.
-;
-;  SOURCE
+;;****** wmiirc/colors
+;;
+;;  NOTES 
+;;    Color, fonts and terminal definitions are here.
+;;
+;;  SOURCE
 
 
 (setq WMII_NORMCOLORS "\#bbbbbb \#222222 \#444444" )
@@ -64,15 +64,16 @@
 (setq WMII_FONT "-*-fixed-medium-r-*-*-13-*-*-*-*-*-*-*")
 
 (setq WMII_TERM "xterm")
+;;(setq WMII_TERM "rxvt -bg black -fg grey90")
 
-;******
+;;******
 
-;****** wmiirc/operational_global_variables
-;
-;  NOTES 
-;    Operational variables. Not for user use. 
-;
-;  SOURCE
+;;****** wmiirc/operational_global_variables
+;;
+;;  NOTES 
+;;    Operational variables. Not for user use. 
+;;
+;;  SOURCE
 
 (setq WMII_HOME nil)
 
@@ -91,15 +92,15 @@
 (constant 'SIGSTOP 19)
 (constant 'SIGTERM 15)
 
-;******
+;;******
 
 
-;****** wmiirc/exception_handling
-;
-;  NOTES 
-;    Exception handling routine, currently stubbed. 
-;
-;  SOURCE
+;;****** wmiirc/exception_handling
+;;
+;;  NOTES 
+;;    Exception handling routine, currently stubbed. 
+;;
+;;  SOURCE
 
 (define (ctrlC-handler)
   (destroy pid)
@@ -108,34 +109,34 @@
 
 
 
-;(signal SIGINT 'ctrlC-handler)
-;(signal SIGKILL 'ctrlC-handler)
-;(signal SIGQUIT 'ctrlC-handler)
-;(signal SIGABRT 'ctrlC-handler)
-;(signal SIGSTOP 'ctrlC-handler)
-;(signal SIGTERM 'ctrlC-handler)
+;;(signal SIGINT 'ctrlC-handler)
+;;(signal SIGKILL 'ctrlC-handler)
+;;(signal SIGQUIT 'ctrlC-handler)
+;;(signal SIGABRT 'ctrlC-handler)
+;;(signal SIGSTOP 'ctrlC-handler)
+;;(signal SIGTERM 'ctrlC-handler)
 
-;******
+;;******
 
-;****** wmiirc/home_directory
-;
-;  NOTES 
-;    Determine home directory
-;
-;  SOURCE
+;;****** wmiirc/home_directory
+;;
+;;  NOTES 
+;;    Determine home directory
+;;
+;;  SOURCE
 
 (if (not (nil? (env "WMII_CONFPATH")))
     (setq WMII_HOME (first (parse (env "WMII_CONFPATH" )  ":")))
 )
 
-;******
+;;******
 
-;****** wmiirc/create_config
-;
-;  NOTES 
-;    Create configuration file in home directory
-;
-;  SOURCE
+;;****** wmiirc/create_config
+;;
+;;  NOTES 
+;;    Create configuration file in home directory
+;;
+;;  SOURCE
 
 (if (not (directory? WMII_HOME))
     (begin
@@ -157,31 +158,31 @@
       )
 )
 
-;******
+;;******
 
 
-;****** wmiirc/history
-;
-;  NOTES 
-;    History file location. Not in use
-; 
-;
-;  SOURCE
+;;****** wmiirc/history
+;;
+;;  NOTES 
+;;    History file location. Not in use
+;; 
+;;
+;;  SOURCE
 
 
 # Menu history
 (setq hist (append WMII_HOME "/history"))
 (setq histnum 5000)
 
-;******
+;;******
 
-;****** wmiirc/ixp_defaults
-;
-;  NOTES 
-;    Default values in the ixp file system.
-; 
-;
-;  SOURCE
+;;****** wmiirc/ixp_defaults
+;;
+;;  NOTES 
+;;    Default values in the ixp file system.
+;; 
+;;
+;;  SOURCE
 
 
 # Column Rules - the easy way
@@ -199,72 +200,69 @@ wmiir write /tagrules <<!
 !"
 )
 
-;******
+;;******
 
-;****f* wmiirc/status
-;
-;  NAME 
-;   status
-;
-;  DESCRIPTION
-;     Displays status in the lower right hand corner. 
-;     It defaults to load and date. 
-;
-;  INPUTS
-;     None
-; 
-;  OUTPUT
-;     Load "|" Date
-;   
-;  NOTES 
-;     Other status types and variables can be used.
-;     It gets forked by newlisp and runs on the background.
-; 
-;******
+;;****f* wmiirc/status
+;;
+;;  NAME 
+;;   status
+;;
+;;  DESCRIPTION
+;;     Displays status in the lower right hand corner. 
+;;     It defaults to load and date. 
+;;
+;;  INPUTS
+;;     None
+;; 
+;;  OUTPUT
+;;     Load "|" Date
+;;   
+;;  NOTES 
+;;     Other status types and variables can be used.
+;;     It gets forked by newlisp and runs on the background.
+;; 
+;;******
 
 # Status Bar Info
 (define (status)
-  (append (last (parse (first (exec "uptime")) ":")) " | " (date))
-)
+  (append (last (parse (first (exec "uptime")) ":")) " | " (date)))
 
 
-;****** wmiirc/user_configuration
-; 
-;  NOTES
-;     Load user configuration. Not really too useful for now.
-;     But it is there. 
-;  
-;  SOURCE
+;;****** wmiirc/user_configuration
+;; 
+;;  NOTES
+;;     Load user configuration. Not really too useful for now.
+;;     But it is there. 
+;;  
+;;  SOURCE
 
 (define (local_events) 1)
 
 (catch 
  (load (append WMII_HOME "/wmiirc_local")) 'result)
 
-;******
+;;******
 
-;****** wmiirc/remaining
-; 
-;  NOTES
-;     The remaining code is non user configurable. It:
-;     * set up status and colors.
-;     * loads libraries
-;     * load workspaces
-;     * runs event loop.
-;
-;******
+;;****** wmiirc/remaining
+;; 
+;;  NOTES
+;;     The remaining code is non user configurable. It:
+;;     * set up status and colors.
+;;     * loads libraries
+;;     * load workspaces
+;;     * runs event loop.
+;;
+;;******
 
 
 
 (! (format "echo %s | wmiir create $noticebar" WMII_NORMCOLORS))
 
-
 (dolist (dirtoload (parse (env "WMII_CONFPATH") ":"))
-	(catch (load (append dirtoload "/wmii.nlsp")) 'result)
-)
+	(catch (load (append dirtoload "/wmii.nlsp")) 'result))
 
-; WM Configuration
-; Still the easy way
+;; WM Configuration
+;; Still the easy way
  
 (! (format "
 wmiir write /ctl <<!
@@ -278,8 +276,7 @@ wmiir write /ctl <<!
 	   WMII_FOCUSCOLORS
 	   WMII_NORMCOLORS
 	   MODKEY
-	   )
-   )
+	   ))
 
 (process (format "xsetroot -solid \"%s\""  WMII_BACKGROUND))
 
@@ -287,20 +284,20 @@ wmiir write /ctl <<!
 
 (setq progsfile (first (exec "wmiir namespace /.proglist")))
 
-; action needs to be obtained
+;; action needs to be obtained
 
 (setq statuspid (fork (Action (list "status") )))
 
 # Setup Tag Bar
 
-;(println (exec "wmiir ls /lbar | sed 's,^,/lbar/,'"))
+;;(println (exec "wmiir ls /lbar | sed 's,^,/lbar/,'"))
 
 (setq tag_list (exec "wmiir ls /lbar "))
+
 (if (not (null? tag_list))
     (begin
       (setq tag_bar (first (exec "wmiir ls /lbar | sed 's,^,/lbar/,'")))
-      (! (format "wmiir rm %s >/dev/null" tag_bar)) )
-)
+      (! (format "wmiir rm %s >/dev/null" tag_bar))))
 
 
 (setq seltag (first (exec "wmiir read /tag/sel/ctl | sed 1q")))
@@ -312,8 +309,6 @@ wmiir write /ctl <<!
    (if (= tag seltag)
        (setq colorize (append "'" WMII_FOCUSCOLORS "' " tag))	
        (setq colorize (append "'" WMII_NORMCOLORS "' " tag)) )
-   (! (format "echo %s | wmiir create /lbar/%s" colorize tag)) 
-   )
-)
+   (! (format "echo %s | wmiir create /lbar/%s" colorize tag))))
 
 (wi_eventloop)
