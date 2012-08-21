@@ -40,7 +40,7 @@
 
 
 (define (select-shift-tag i)
-  (setq i (int  (nth 1 (parse i "-"))))
+  (setq i (int  (nth 2 (parse i "-"))))
   (! (format "wmiir xwrite /client/sel/tags \"%d\"" i)))
 
 ;;****** key-items/Mod-Left
